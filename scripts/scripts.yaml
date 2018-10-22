@@ -1,0 +1,187 @@
+watch_kodi:
+  alias: Watch Kodi
+  sequence:
+  - service: script.turn_on
+    entity_id: script.start_living_room
+  - service: switch.turn_on
+    entity_id: switch.living_room_power
+  - service: hdmi_cec.power_on
+    data:
+      device: 0.0.0.0
+  - data:
+      source: HDMI3
+    service: script.wake_rxv481d
+  - service: light.turn_on
+    data:
+      effect: HDMI
+
+watch_tv:
+  alias: Watch TV
+  sequence:
+  - service: script.turn_on
+    entity_id: script.start_living_room
+  - service: switch.turn_on
+    entity_id: switch.living_room_power
+  - service: light.turn_on
+    data:
+      entity_id: light.hyperion
+      rgb_color: [0,167,247]
+      brightness: 150
+  - service: hdmi_cec.power_on
+    data:
+      device: 0.0.0.0
+  - data:
+      source: HDMI2
+    service: script.wake_rxv481d
+
+play_ps4:
+  alias: Play PS4
+  sequence:
+  - service: script.turn_on
+    entity_id: script.start_living_room
+  - service: switch.turn_on
+    entity_id: switch.living_room_power
+  - service: shell_command.switch_on_ps4
+  - service: hdmi_cec.power_on
+    data:
+      device: 0.0.0.0
+  - service: light.turn_on
+    data:
+      entity_id: light.hyperion
+      rgb_color: [0,167,247]
+      brightness: 150
+  - data:
+      source: HDMI4
+    service: script.wake_rxv481d
+
+
+
+update_kodi_library:
+  alias: Update Kodi Library
+  sequence:
+  - alias: Call Kodi update
+    service: media_player.kodi_call_method
+    data:
+      entity_id: media_player.kodi
+      method: VideoLibrary.Scan
+
+
+
+start_living_room:
+  #this only runs if living room power isnt on yet
+  alias: Start Living Room
+  sequence:
+  - condition: state
+    entity_id: switch.living_room_power
+    state: 'off'  
+  - service: light.turn_on
+    data:
+      entity_id: light.hyperion
+      effect: Rainbow swirl fast
+
+ps4_start_x:
+  alias: PS4 Start X
+  sequence:
+  - service: script.turn_on
+    entity_id: script.play_ps4
+  - service: shell_command.start_ps4_app
+    data_template:
+      app_id: >
+        {% if (title == "Netflix") %}    CUSA00127
+        {% elif (title == "YouTube") %}  CUSA01116
+        {% elif (title == "Yakuza 0") %} CUSA05133
+        {% elif (title == "Inside") %}   CUSA02754
+        {% endif %}
+
+shutdown_living_room:
+  alias: Shutdown Living Room
+  sequence:
+  - service: media_player.play_media
+    data_template:
+      entity_id: media_player.google_home_living_room
+      media_content_id: https://nadnerb.duckdns.org:8123/local/shutdown.mp3
+      media_content_type: audio/mp4
+  - service: light.turn_on
+    data:
+      entity_id: light.hyperion
+      effect: Rainbow swirl fast
+  - service: shell_command.switch_off_ps4
+  - service: media_player.turn_off
+    entity_id: media_player.yamaha_rxv481d
+  - service: media_player.turn_off
+    entity_id: media_player.living_room_tv
+  - delay: 00:00:05
+  - service: light.turn_off
+    data:
+      entity_id: light.hyperion
+  - service: switch.turn_off
+    entity_id: switch.living_room_power
+
+
+
+wake_rxv481d:
+  alias: Wake Yamaha RXV481D
+  sequence:
+  - service: switch.turn_off
+    data:
+      entity_id: switch.leds
+  - service: hdmi_cec.power_on
+    data:
+      device: 2.0.0.0
+  - service: media_player.turn_on
+    entity_id: media_player.yamaha_rxv481d
+  - service: media_player.select_source
+    data_template:
+      source: '{{source}}'
+  #was the switch on successful? if so quit, if not continue
+  - condition: state
+    entity_id: media_player.yamaha_rxv481d
+    state: 'off'
+  - service: switch.turn_on
+    data:
+      entity_id: switch.leds
+  - delay: 00:00:04
+  - data_template:
+      source: '{{source}}'
+    service: script.wake_rxv481d_again
+
+wake_rxv481d_again:
+  alias: Wake Yamaha RXV481D again
+  sequence:
+  - delay: 00:00:02
+  - data_template:
+      source: '{{source}}'
+    service: script.wake_rxv481d
+
+
+
+c2w1:
+  alias: Cycle 2 Workout 1
+  sequence:
+  - service: shell_command.play_youtube_chromecast
+    data_template:
+      video: '{{"dNYc1pRoFjg" | urlencode}}'
+c2w2:
+  alias: Cycle 2 Workout 2
+  sequence:
+  - service: shell_command.play_youtube_chromecast
+    data_template:
+      video: '{{"CtSGo_VPgbA" | urlencode}}'
+c2w3:
+  alias: Cycle 2 Workout 3
+  sequence:
+  - service: shell_command.play_youtube_chromecast
+    data_template:
+      video: '{{"6q1xSAGOXQA" | urlencode}}'
+c2w4:
+  alias: Cycle 2 Workout 4
+  sequence:
+  - service: shell_command.play_youtube_chromecast
+    data_template:
+      video: '{{"nsZWdacM1V8" | urlencode}}'
+c2w5:
+  alias: Cycle 2 Workout 5
+  sequence:
+  - service: shell_command.play_youtube_chromecast
+    data_template:
+      video: '{{"NFS4WZw-87Y" | urlencode}}'
