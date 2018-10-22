@@ -1,0 +1,71 @@
+- platform: wake_on_lan
+  mac_address: "cc:5d:4e:ca:18:d2"
+  name: "WOL_NAS"
+  host: "192.168.0.10"
+
+- platform: template
+  switches:
+    rxv481d:
+      #update to include 'idle' state
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') or is_state('media_player.yamaha_rxv481d', 'idle') or is_state('media_player.yamaha_rxv481d', 'playing') }}"
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.yamaha_rxv481d
+        # service: hdmi_cec.power_on
+        # data:
+        #   device: 2.0.0.0
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.yamaha_rxv481d
+    living_room_tv:
+      value_template: "{{ is_state('media_player.living_room_tv', 'on') }}"
+      turn_on:
+        service: hdmi_cec.power_on
+        data:
+          device: 0.0.0.0
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.living_room_tv
+        # service: hdmi_cec.standby
+        # data:
+        #   device: 0.0.0.0
+    # pi_usb:
+    #   value_template: "{{ is_state('media_player.living_room_tv', 'off') }}"
+    #   turn_on:
+    #     service: shell_command.turn_on_pi_usb
+    #   turn_off:
+    #     service: shell_command.turn_off_pi_usb
+    ps4:
+      value_template: "{{ (not is_state('media_player.playstation_4', 'off')) }}"
+      turn_on:
+        service: shell_command.switch_on_ps4
+        # service: media_player.turn_on
+        # data:
+        #   entity_id: media_player.playstation_4
+      turn_off:
+        service: shell_command.switch_off_ps4
+        # service: media_player.turn_off
+        # data:
+        #   entity_id: media_player.playstation_4
+
+# - platform: switch
+#     turn_everything_off:
+#       value_template: "false"
+#       turn_on:
+#         service: script.turn_everything_off
+#       turn_off: 
+
+- platform: rpi_gpio
+  ports:
+    21: leds #number on picase
+    26: TV Unit Fans
+
+
+- platform: tplink
+  name: Living Room Power
+  host: 192.168.0.37
+
+

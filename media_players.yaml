@@ -1,0 +1,41 @@
+- platform: samsungtv
+  name: Living Room TV
+  host: 192.168.0.28 #wifi
+
+- platform: kodi
+  host: 192.168.0.33
+  port: 80
+
+- platform: yamaha
+  host: 192.168.0.12 #wifi
+  name: Yamaha RXV481D
+  source_ignore:
+    - "AUX"
+    - "AUDIO1"
+    - "AUDIO2"
+    - "AV1"
+    - "AV2"
+    - "AV3"
+    - "AV4"
+    - "AirPlay"
+    - "Bluetooth"
+    - "HDMI1"
+    - "JUKE"
+    - "MusicCast Link"
+    - "NET RADIO"
+    - "Qobuz"
+    - "SERVER"
+    - "TUNER"
+    - "USB"
+  source_names:
+    HDMI2: "Freesat"
+    HDMI3: "Kodi"
+    HDMI4: "PS4"
+
+
+- platform: ps4
+  host: 192.168.0.44
+  cmd: /usr/bin/ps4-waker -c /config/.ps4-wake.credentials.json 
+  filename: /config/.ps4-wake.credentials.json
+  games_filename: /config/ps4-games.json
+

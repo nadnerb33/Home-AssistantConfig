@@ -1,0 +1,24 @@
+# - platform: systemmonitor
+#   resources:
+#   - type: disk_use_percent
+#     arg: /
+#   - type: memory_free
+#   - type: processor_use
+#   - type: network_in
+#     arg: eth0
+#   - type: network_out
+#     arg: eth0
+#   - type: last_boot
+
+- platform: dht
+  sensor: DHT11
+  pin: 4
+  monitored_conditions:
+    - temperature
+    - humidity
+
+#https://home-assistant.io/components/sensor.cert_expiry/
+- platform: cert_expiry
+  host: !secret ssl_host
+  port: 8123
+  name: SSL Expiry

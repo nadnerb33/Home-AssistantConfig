@@ -1,0 +1,22 @@
+- id: '1538774579913'
+  alias: Switch on fans when TV unit is hot
+  trigger:
+  - above: '32'
+    entity_id: sensor.dht_sensor_temperature
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      entity_id: switch.tv_unit_fans
+    service: switch.turn_on
+- id: '1538774579112'
+  alias: Switch off fans when TV unit is cool
+  trigger:
+  - below: '28'
+    entity_id: sensor.dht_sensor_temperature
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      entity_id: switch.tv_unit_fans
+    service: switch.turn_off

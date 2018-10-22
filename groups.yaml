@@ -1,0 +1,42 @@
+#Groups
+System:
+  name: System
+  entities:
+  - sensor.network_in_eth0
+  - sensor.network_out_eth0
+  - sensor.memory_free
+  - sensor.processor_use
+  - sensor.disk_use_percent_
+  - sensor.last_boot
+g1:
+  name: Tiles showcase
+  entities:
+    - input_text.dummy_tiles
+Nest:
+  name: Climate
+  entities:
+  - climate.dining_room
+  - sensor.dining_room_thermostat_humidity
+  - sensor.dining_room_thermostat_hvac_state
+  - sensor.dining_room_thermostat_operation_mode
+  - sensor.dining_room_thermostat_target
+  - sensor.dining_room_thermostat_temperature
+# tabs ################################################
+SystemView:
+  name: System
+  view: yes
+  entities:
+  - group.system
+  - sensor.network_in_eth0
+  - sensor.network_out_eth0
+  - sensor.memory_free
+  - sensor.processor_use
+  - sensor.disk_use_percent_
+  - sensor.last_boot
+ps4:
+  name: PS4
+  view: yes
+  entities:
+  - script.play_ps4
+
+    

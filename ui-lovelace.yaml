@@ -1,0 +1,84 @@
+#guide https://www.youtube.com/watch?v=ObfRzMIEJPg&feature=youtu.be
+
+
+
+title: My Home
+# Include external resources
+resources:
+  - url: /local/my-custom-card.js
+    type: js
+  - url: /local/my-webfont.css
+    type: css
+
+# Optional background for all views. Check https://developer.mozilla.org/en-US/docs/Web/CSS/background for more examples.
+background: center / cover no-repeat url("/background.png") fixed
+# Exclude entities from "Unused entities" view
+excluded_entities:
+  - weblink.router
+views:
+    # View tab title.
+  - title: Example
+    # Optional unique id for direct access /lovelace/${id}
+    id: example
+    # Optional background (overwrites the global background).
+    # background: radial-gradient(crimson, skyblue)
+    # Each view can have a different theme applied. Theme should be defined in the frontend.
+    theme: dark-mode
+    # The cards to show on this view.
+    cards:
+        # The filter card will filter entities for their state
+      - type: entity-filter
+        entities:
+          - device_tracker.oneplus_3
+          - device_tracker.computer3connect
+        state_filter:
+          - 'home'
+        card:
+          type: glance
+          title: Who is home?
+
+        # The picture entity card will represent an entity with a picture
+      - type: picture-entity
+        image: http://www.bujarra.com/wp-content/uploads/2017/02/Hyperion-Raspbmc-00-bujarra-978x500.png
+        entity: light.hyperion
+      - type: iframe
+        url:  https://www.windy.com/51.381/-2.360?temp,50.593,-2.360,7,m:e4Naf5f #https://embed.windy.com/embed2.html
+        aspect_ratio: 100%
+
+
+# ******************* WORKOUTS ********************************************
+    # Specify a tab icon if you want the view tab to be an icon.
+  - icon: mdi:dumbbell
+    # Title of the view. Will be used as the tooltip for tab icon
+    title: Workouts
+    cards:
+        # Entities card will take a list of entities and show their state.
+      - type: entities
+        # Title of the entities card
+        title: Workouts (Play on Dining Room TV)
+        # The entities here will be shown in the same order as specified.
+        # Each entry is an entity ID or a map with extra options.
+        entities:
+          - entity: script.c2w1
+            icon: mdi:dumbbell
+          - entity: script.c2w2
+            icon: mdi:dumbbell
+          - entity: script.c2w3
+            icon: mdi:dumbbell
+          - entity: script.c2w4
+            icon: mdi:dumbbell
+          - entity: script.c2w5
+            icon: mdi:dumbbell
+      - type: iframe
+        title: Meal Plan
+        url: https://nadnerb.co.uk/recipes/mealplan.php
+        aspect_ratio: 100%
+
+
+
+
+        # The markdown card will render markdown text.
+      # - type: markdown
+      #   title: Markdown
+      #   content: >
+      #     Welcome to your **Lovelace UI**.
