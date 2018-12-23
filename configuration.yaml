@@ -45,7 +45,21 @@ updater:
 discovery:
 
 # Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
+#conversation:
+
+
+recorder:
+  purge_keep_days: 2
+  purge_interval: 2
+  exclude:
+    entities:
+      - sensor.ssl_expiry
+      - sensor.processor_use
+      - sensor.memory_use_percent
+      - sensor.disk_free_
+      - sensor.cpu_temperature
+      - sensor.home_eta
+      - sensor.database_file_size
 
 # Enables support for tracking state changes over time
 history:
@@ -61,6 +75,7 @@ history:
       - sensor.disk_free_
       - sensor.cpu_temperature
       - sensor.home_eta
+      - sensor.database_file_size
 
 # View all events in a logbook
 logbook:
@@ -75,8 +90,6 @@ logbook:
 
 # Enables a map showing the location of tracked devices
 map:
-
-
 
 nest:
   client_id: !secret client_id
@@ -101,9 +114,6 @@ hdmi_cec:
   devices:
     tv: 0.0.0.0
     rxv: 2.0.0.0
-
-# hdmi_cec:
-#   host: 192.168.0.1 #intentionally break cec?
 
 google_assistant:
   project_id: !secret project_id
