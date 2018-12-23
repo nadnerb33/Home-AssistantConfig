@@ -1,0 +1,31 @@
+
+play_youtube_chromecast: 'curl -H "Content-Type: application/json" http://192.168.0.8:8008/apps/YouTube -X POST -d v={{video}}'
+renew_ssl: /config/private/dehydrated/dehydrated -c
+update_duckdns: !secret update_duckdns
+
+#ssh because ps4-waker is installed outside of docker 
+# switch_on_ps4:  ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000'
+# switch_off_ps4: ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000 standby'
+
+switch_on_ps4:  ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000
+switch_off_ps4: ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000 standby
+start_ps4_app: 'ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000 start {{ app_id }}'
+
+#These require ssh/key login to be set up beforehand so HA can SSH into OSMC without password
+status_kodi: ssh osmc@192.168.0.33 'sudo systemctl restart mediacenter'
+start_kodi: ssh osmc@192.168.0.33 'sudo systemctl start mediacenter'
+stop_kodi:  ssh osmc@192.168.0.33 'sudo systemctl stop mediacenter'
+
+status_hyperiond: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh status hyperion'
+start_hyperiond: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh start hyperion'
+stop_hyperiond:  ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh stop hyperion'
+
+alarm: /usr/bin/curl -X GET http://192.168.0.66/buzzer
+send_remote_cmd: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE {{ remote_cmd }}'
+switch_freesat_channel: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat {{ sequence }}'
+switch_off_freesat: echo "standby 3" | cec-client -s
+#switch on freesat is done by IR LED / send_remote_cmd above
+
+#could get this working if you add an SSH command beforehand, or install within docker
+#   turn_off_pi_usb: sudo /home/homeassistant/uhubctl/uhubctl -a off -p 2
+#   turn_on_pi_usb: sudo /home/homeassistant/uhubctl/uhubctl -a on -p 2

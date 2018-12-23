@@ -2,21 +2,71 @@
   alias: Switch on fans when TV unit is hot
   trigger:
   - above: '32'
-    entity_id: sensor.dht_sensor_temperature
+    entity_id: sensor.tv_unit_temperature
     platform: numeric_state
   condition: []
   action:
   - data:
-      entity_id: switch.tv_unit_fans
+      entity_id: switch.fans
     service: switch.turn_on
 - id: '1538774579112'
   alias: Switch off fans when TV unit is cool
   trigger:
-  - below: '28'
-    entity_id: sensor.dht_sensor_temperature
+  - below: '29'
+    entity_id: sensor.tv_unit_temperature
     platform: numeric_state
   condition: []
   action:
   - data:
-      entity_id: switch.tv_unit_fans
+      entity_id: switch.fans
     service: switch.turn_off
+- alias: Notification Audio - Welcome Home Person
+  trigger:
+  - platform: state
+    entity_id:
+    - group.brendan
+    - group.lauren
+    to: home
+    for: 00:0:01
+  condition:
+  - condition: time
+    after: 07:30
+    before: '22:00'
+  action:
+  - service: script.turn_on
+    entity_id: script.broadcast_via_googlehome
+    data_template:
+      variables:
+        what: '{% set person = trigger.entity_id.split(''.'')[1] %} {%- macro greeting_sentence(person)
+          -%} {{ [ person + " is in da house!", "Put the kettle on, " ~ person + "
+          is home!",  "Welcome back home " ~ person, "Guess who is home. " ~ person
+          + " is!", person + " is now in the house.", "Welcome Home " ~ person + ".  We
+          have missed you.", "Our home is now complete, rest your head and relax your
+          feet! Welcome Back " ~ person, "Life is like a song, you’re back where you
+          belong. Welcome home " ~ person, "Hey there " ~ person + " Welcome Home!",
+          "Knock Knock. Who is there. " ~ person + " is!", "I know a secret! " ~ person
+          + " is home!" ] | random }} {%- endmacro -%} {{greeting_sentence(person)}}
+
+          '
+- alias: Notification Audio - Goodbye Person
+  trigger:
+  - platform: state
+    entity_id:
+    - group.brendan
+    - group.lauren
+    to: away
+    for: 00:0:01
+  condition:
+  - condition: time
+    after: 07:30
+    before: '22:00'
+  action:
+  - service: script.turn_on
+    entity_id: script.broadcast_via_googlehome
+    data_template:
+      variables:
+        what: '{% set person = trigger.entity_id.split(''.'')[1] %} {%- macro greeting_sentence(person)
+          -%} {{ [ person + " has left the building!", "Goodbye, " ~ person + ", have
+          a great day!" ] | random }} {%- endmacro -%} {{greeting_sentence(person)}}
+
+          '

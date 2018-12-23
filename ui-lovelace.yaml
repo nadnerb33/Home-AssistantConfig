@@ -11,15 +11,16 @@ resources:
     type: css
 
 # Optional background for all views. Check https://developer.mozilla.org/en-US/docs/Web/CSS/background for more examples.
-background: center / cover no-repeat url("/background.png") fixed
+#background: center / cover no-repeat url("/background.png") fixed
 # Exclude entities from "Unused entities" view
 excluded_entities:
   - weblink.router
 views:
     # View tab title.
-  - title: Example
+  - title: Home
     # Optional unique id for direct access /lovelace/${id}
-    id: example
+
+    id: home
     # Optional background (overwrites the global background).
     # background: radial-gradient(crimson, skyblue)
     # Each view can have a different theme applied. Theme should be defined in the frontend.
@@ -27,23 +28,114 @@ views:
     # The cards to show on this view.
     cards:
         # The filter card will filter entities for their state
-      - type: entity-filter
+      # - type: entity-filter
+      #   entities:
+      #     - group.brendan
+      #     - group.lauren
+      #   state_filter:
+      #     - home
+      #   card:
+      #     type: glance
+      #     title: Who is home?
+      - type: entities
+        title: Who is home?
         entities:
-          - device_tracker.oneplus_3
-          - device_tracker.computer3connect
+          - group.brendan
+          - group.lauren
+            
+      - type: entity-filter
+        entities: !include active_devices.yaml
         state_filter:
-          - 'home'
+          - "on"
+          - "playing"
+          - "idle"
         card:
-          type: glance
-          title: Who is home?
-
-        # The picture entity card will represent an entity with a picture
-      - type: picture-entity
-        image: http://www.bujarra.com/wp-content/uploads/2017/02/Hyperion-Raspbmc-00-bujarra-978x500.png
-        entity: light.hyperion
+          type: entities
+          title: Active Devices
       - type: iframe
-        url:  https://www.windy.com/51.381/-2.360?temp,50.593,-2.360,7,m:e4Naf5f #https://embed.windy.com/embed2.html
+        url:  !secret weather_url #https://embed.windy.com/embed2.html
         aspect_ratio: 100%
+
+
+  - title: Living Room
+    id: living_room
+    cards:
+      - type: horizontal-stack
+        cards:
+        # Entities card will take a list of entities and show their state.
+              # The picture entity card will represent an entity with a picture
+        - type: picture-entity
+          image: /local/hyperion.png
+          entity: light.hyperion
+          name: TV LEDs
+        # - type: picture-entity
+        #   image: /local/fan.png
+        #   entity: switch.tv_unit_fans
+      # - type: sensor
+      #   entity: sensor.tv_unit_temperature
+      #   name: TV Unit Temp
+      #   height: 50
+      #   line_color: "#3498db"
+      #   accuracy: 30
+      - type: gauge
+        title: TV Unit
+        unit_of_measurement: '°C'
+        entity: sensor.tv_unit_temperature
+        severity:
+          green: 10
+          yellow: 28
+          red: 38
+      # - type: sensor
+      #   entity: sensor.tv_unit_humidity
+      #   icon: mdi:water-percent
+      #   name: TV Unit Humidity
+      #   height: 50
+      #   line_color: "#3498db"
+      #   accuracy: 30
+      - type: media-control
+        entity: media_player.kodi
+      - type: media-control
+        entity: media_player.yamaha_rxv481d
+
+
+  - title: RPi
+    id: Rpi
+    type: vertical-stack
+    cards:
+      - type: sensor
+        entity: sensor.cpu_temperature
+        name: CPU Temp
+        height: 45
+        line_color: "#3498db"
+        accuracy: 30
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            title: CPU Usage
+            unit_of_measurement: '%'
+            entity: sensor.processor_use
+            severity:
+              green: 0
+              yellow: 45
+              red: 85
+          - type: gauge
+            title: Memory Usage
+            unit_of_measurement: '%'
+            entity: sensor.memory_use_percent
+            icon: mdi:memory
+            severity:
+              green: 0
+              yellow: 45
+              red: 85
+      - type: entities
+        entities:
+          - entity: sensor.disk_free_
+            icon: mdi:harddisk
+      - type: entities
+        title: Services running on RPi
+        entities:
+          - entity: switch.hyperionservice
+          - entity: switch.kodiservice
 
 
 # ******************* WORKOUTS ********************************************
@@ -71,12 +163,16 @@ views:
             icon: mdi:dumbbell
       - type: iframe
         title: Meal Plan
-        url: https://nadnerb.co.uk/recipes/mealplan.php
+        url: !secret mealplan_url
         aspect_ratio: 100%
 
-
-
-
+  - title: Scripts
+    # Title of the view. Will be used as the tooltip for tab icon
+    cards:
+      - type: entities
+        title: Who is home?
+        domain:
+          - script
         # The markdown card will render markdown text.
       # - type: markdown
       #   title: Markdown

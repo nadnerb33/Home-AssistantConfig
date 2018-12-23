@@ -3,6 +3,34 @@
   name: "WOL_NAS"
   host: "192.168.0.10"
 
+- platform: command_line
+  switches:
+    hyperionservice:
+      command_on: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh start hyperion'
+      command_off: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh stop hyperion'
+      command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh status hyperion' #will return 0 if on and 1 if off
+    kodiservice:
+      command_on: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh start mediacenter'
+      command_off: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh stop mediacenter'
+      command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh status mediacenter' #will return 0 if on and 1 if off
+    # esp2688:
+    #   command_on: /usr/bin/curl -X GET http://192.168.0.66
+    #   command_off: /usr/bin/curl -X GET http://192.168.0.66/flash
+    #   command_state: echo 0
+    freesat:
+      command_on: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_NUMERIC_0' #could use KEY_POWER, but this will turn off the box if its aready on. 0 will turn on, but not off
+      command_off: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_POWER' 
+      # command_off: echo "standby 3" | cec-client -s 
+    #   #network tends to stay up for a while so cant rely on ping
+      command_state: ping -c 5 192.168.0.32 &> /dev/null && echo 0 || echo 1
+    #   command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/freesat_status.sh' #will return 0 if on and 1 if off
+    #tv_rpi:
+    #  command_on: ssh osmc@192.168.0.33 "echo 'on 0' | /usr/osmc/bin/cec-client -s"
+    #  command_off: ssh osmc@192.168.0.33 "echo 'standby 0' | /usr/osmc/bin/cec-client -s"
+      # command_state: ssh osmc@192.168.0.33 "echo 'pow 0' | /usr/osmc/bin/cec-client -s |grep 'power status:'"
+      # value_template: '{{ value == "power status: on" }}'
+    #  value_template: "{{ is_state('media_player.tv', 'on') }}"
+
 - platform: template
   switches:
     rxv481d:
@@ -12,15 +40,12 @@
         service: media_player.turn_on
         data:
           entity_id: media_player.yamaha_rxv481d
-        # service: hdmi_cec.power_on
-        # data:
-        #   device: 2.0.0.0
       turn_off:
         service: media_player.turn_off
         data:
           entity_id: media_player.yamaha_rxv481d
-    living_room_tv:
-      value_template: "{{ is_state('media_player.living_room_tv', 'on') }}"
+    tv: #living room tv 
+      value_template: "{{ is_state('media_player.tv', 'on') }}"
       turn_on:
         service: hdmi_cec.power_on
         data:
@@ -28,10 +53,9 @@
       turn_off:
         service: media_player.turn_off
         data:
-          entity_id: media_player.living_room_tv
-        # service: hdmi_cec.standby
-        # data:
-        #   device: 0.0.0.0
+          entity_id: media_player.tv
+
+
     # pi_usb:
     #   value_template: "{{ is_state('media_player.living_room_tv', 'off') }}"
     #   turn_on:
@@ -60,8 +84,8 @@
 
 - platform: rpi_gpio
   ports:
-    21: leds #number on picase
-    26: TV Unit Fans
+    21: led #number on picase
+    26: Fans #tv unit
 
 
 - platform: tplink

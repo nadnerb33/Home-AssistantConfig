@@ -1,0 +1,16 @@
+#lights
+- light.tv_leds
+
+#media players
+- media_player.google_home_living_room
+- media_player.google_home_dining_room
+- media_player.chromecast_dining_room
+- media_player.living_room_tv
+- media_player.yamaha_rxv481d
+- media_player.playstation_4
+# - media_player.kodi # this is always active, so ignore this
+
+#switches
+- switch.living_room_power
+- switch.tv_unit_fans
+- switch.led

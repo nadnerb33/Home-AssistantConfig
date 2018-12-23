@@ -11,7 +11,7 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: Europe/London
   # Customization file
-  customize: !include customize.yaml
+  customize: !include customisation/customize.yaml
 
 # Show links to resources in log and frontend
 #introduction:
@@ -49,21 +49,33 @@ conversation:
 
 # Enables support for tracking state changes over time
 history:
+  include:
+    domains:
+      - sensor
+      - device_tracker
+  exclude:
+    entities:
+      - sensor.ssl_expiry
+      - sensor.processor_use
+      - sensor.memory_use_percent
+      - sensor.disk_free_
+      - sensor.cpu_temperature
+      - sensor.home_eta
 
 # View all events in a logbook
 logbook:
+  exclude:
+    entities:
+      - binary_sensor.pibutton
+      - sensor.ssl_expiry
+      - sensor.home_eta
+    domains:
+      - script
   # ditch a bunch of stuff from here
 
 # Enables a map showing the location of tracked devices
 map:
 
-device_tracker:
-  - platform: bluetooth_tracker
-  - platform: sky_hub
-    host: 192.168.0.100
-  # - platform: google_maps
-  #   username: !secret username
-  #   password: !secret password
 
 
 nest:
@@ -75,33 +87,23 @@ light:
     host: 192.168.0.33
     default_color: [255,0,255]
 
-binary_sensor:
-    platform: rpi_gpio
-    ports:
-      12: pibutton #number on pi case
-    value_high: "On"
-    value_low: "Off"
-    invert_logic: true
+# binary_sensor:
+#     platform: rpi_gpio
+#     ports:
+#       12: pibutton #number on pi case
+#     value_high: "On"
+#     value_low: "Off"
+#     invert_logic: true
 
-shell_command:
-  play_youtube_chromecast: 'curl -H "Content-Type: application/json" http://192.168.0.8:8008/apps/YouTube -X POST -d v={{video}}'
-  renew_ssl: /config/dehydrated/dehydrated -c
-  update_duckdns: !secret update_duckdns
-  #ssh because ps4-waker is installed outside of docker 
-  # switch_on_ps4:  ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000'
-  # switch_off_ps4: ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000 standby'
-  switch_on_ps4:  ps4-waker -c /config/.ps4-wake.credentials.json -d 192.168.0.44 -t 5000
-  switch_off_ps4: ps4-waker -c /config/.ps4-wake.credentials.json -d 192.168.0.44 -t 5000 standby
-  start_ps4_app: 'ps4-waker -c /config/.ps4-wake.credentials.json -d 192.168.0.44 -t 5000 start {{ app_id }}'
-
-#could get this working if you add an SSH command beforehand, or install within docker
-#   turn_off_pi_usb: sudo /home/homeassistant/uhubctl/uhubctl -a off -p 2
-#   turn_on_pi_usb: sudo /home/homeassistant/uhubctl/uhubctl -a on -p 2
+shell_command: !include shell_commands.yaml
 
 hdmi_cec:
   devices:
     tv: 0.0.0.0
     rxv: 2.0.0.0
+
+# hdmi_cec:
+#   host: 192.168.0.1 #intentionally break cec?
 
 google_assistant:
   project_id: !secret project_id
@@ -118,7 +120,7 @@ google_assistant:
       name: Watch Kodi
       expose: true
     light.hyperion:
-      name: Hyperion
+      name: TV LEDs
       expose: true
     script.update_kodi_library:
       name: Update Kodi
@@ -129,12 +131,13 @@ tts:
   - platform: google
 
 # Cloud
-cloud:
+#cloud:
 
 media_player: !include media_players.yaml
 sensor: !include sensors.yaml
 switch: !include switches.yaml
-# group: !include groups.yaml
+group: !include groups.yaml
 automation: !include automations.yaml
-script: !include_dir_named scripts
+#script: !include_dir_merge_named scripts/
+script: !include script.yaml
 panel_iframe: !include panels.yaml

@@ -1,5 +1,5 @@
 - platform: samsungtv
-  name: Living Room TV
+  name: TV #front room
   host: 192.168.0.28 #wifi
 
 - platform: kodi
@@ -15,7 +15,6 @@
     - "AUDIO2"
     - "AV1"
     - "AV2"
-    - "AV3"
     - "AV4"
     - "AirPlay"
     - "Bluetooth"
@@ -31,6 +30,7 @@
     HDMI2: "Freesat"
     HDMI3: "Kodi"
     HDMI4: "PS4"
+    AV3: "Vinyl"
 
 
 - platform: ps4

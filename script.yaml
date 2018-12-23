@@ -1,8 +1,8 @@
 watch_kodi:
   alias: Watch Kodi
   sequence:
-  - service: shell_command.start_kodi
-  - service: shell_command.start_hyperiond
+ # - service: shell_command.start_kodi
+ # - service: shell_command.start_hyperiond
   - service: script.turn_on
     entity_id: script.start_living_room
   - service: switch.turn_on
@@ -47,7 +47,7 @@ play_ps4:
     entity_id: script.start_living_room
   - service: switch.turn_on
     entity_id: switch.living_room_power
-  - service: shell_command.switch_on_ps4
+  - service: shell_command.switch_on_ps4 #add condition so this only runs if PS4 is off
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
@@ -58,6 +58,15 @@ play_ps4:
       brightness: 150
   - data:
       source: PS4
+    service: script.wake_rxv481d
+
+play_vinyl:
+  alias: Play vinyl
+  sequence:
+  - service: switch.turn_on
+    entity_id: switch.living_room_power
+  - data:
+      source: Vinyl
     service: script.wake_rxv481d
 
 
@@ -97,7 +106,71 @@ ps4_start_x:
         {% elif (title == "YouTube") %}  CUSA01116
         {% elif (title == "Yakuza 0") %} CUSA05133
         {% elif (title == "Inside") %}   CUSA02754
+        {% elif (title == "In Side") %}  CUSA02754
+        {% elif (title == "Inside") %}   CUSA02754
         {% endif %}
+
+yamaha_source_x:
+  alias: Switch Yamaha Source
+  sequence:
+  - service: media_player.select_source
+    entity_id: media_player.yamaha_rxv481d
+    # we need to account for variations in Google's spelling of the spoken phrases
+    data_template:
+      source: >
+        {% if   (source == "PS 4")          %} PS4
+        {% elif (source == "Playstation 4") %} PS4
+        {% elif (source == "HDMI 1")        %} HDMI1
+        {% elif (source == "HDMI 2")        %} HDMI2
+        {% elif (source == "HDMI 3")        %} HDMI3
+        {% elif (source == "HDMI 4")        %} HDMI4
+        {% elif (source == "kodi")          %} HDMI3
+        {% elif (source == "FREESAT")       %} HDMI2
+        {% elif (source == "freezer")       %} HDMI2
+        {% elif (source == "AV 3")          %} AV3
+        {% elif (source == "AV free")       %} AV3
+        {% elif (source == "rhino")         %} AV3
+        {% elif (source == "vinyl")         %} AV3
+        {% else %} {{source}}
+        {% endif %}
+
+yamaha_mute:
+  alias: Mute Yamaha
+  sequence:
+  - service: media_player.volume_mute
+    entity_id: media_player.yamaha_rxv481d
+    data_template:
+      is_volume_muted: >
+        {% if (state_attr('media_player.yamaha_rxv481d' , 'is_volume_muted') == false)   %} true
+        {% else  %} false
+        {% endif %}
+
+freesat_channel_x:
+  alias: Switch Freesat Channel
+  sequence:
+    # we need to account for variations in Google's spelling of the spoken phrases
+  - service: shell_command.switch_freesat_channel
+    data_template:
+      sequence: >
+        {% if   (channel.upper() == "BBC 1") %} 1 0 6
+        {% elif (channel.upper() == "BBC 2") %} 1 0 2
+        {% elif (channel.upper() == "BBC 4") %} 1 0 7
+        {% elif (channel.upper() == "CHANNEL 4") %} 1 0 4
+        {% elif (channel.upper() == "CHANNEL 5") %} 1 0 5
+        {% elif (channel.upper() == "ITV") %} 1 1 1
+        {% elif (channel.upper() == "NHK") %} 2 0 9
+        {% elif (channel.upper() == "BBC NEWS") %} 2 0 0
+        {% elif (channel.upper() == "SKY NEWS") %} 20 2
+        {% elif (channel.upper() == "PAUSE") %} Pause
+        {% elif (channel.upper() == "PLAY") %} Play
+        {% elif (channel.upper() == "RESUME") %} Play
+        {% elif (channel.upper() == "RECORD") %} Record
+        {% elif (channel.upper() == "MUTE") %} Mute
+        {% elif (channel.upper() == "UNMUTE") %} Mute
+        {% elif (channel.upper() == "INFO") %} i i ; sleep 8; irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat Exit
+        {% else %} {{channel|title}}
+        {% endif %}
+
 
 shutdown_living_room:
   alias: Shutdown Living Room
@@ -111,6 +184,8 @@ shutdown_living_room:
     data:
       entity_id: light.tv_leds
       effect: Cinema dim lights
+  - service: switch.turn_off
+    entity_id: switch.freesat
   - service: shell_command.switch_off_ps4
   - service: media_player.turn_off
     entity_id: media_player.living_room_tv
@@ -121,7 +196,7 @@ shutdown_living_room:
     data:
       entity_id: light.tv_leds
   #- service: shell_command.stop_hyperiond
-  - service: shell_command.stop_kodi 
+  # - service: shell_command.stop_kodi 
   - service: switch.turn_off
     entity_id: switch.living_room_power
 
@@ -177,12 +252,12 @@ wake_rxv481d:
 wake_rxv481d_action:
   alias: Wake Yamaha RXV481D
   sequence:
-  # - service: switch.turn_off
-  #   data:
-  #     entity_id: switch.led
-  # - service: hdmi_cec.power_on
-  #   data:
-  #     device: 2.0.0.0
+  - service: switch.turn_off
+    data:
+      entity_id: switch.led
+  - service: hdmi_cec.power_on
+    data:
+      device: 2.0.0.0
   - service: media_player.turn_on
     entity_id: media_player.yamaha_rxv481d
   - service: media_player.select_source
