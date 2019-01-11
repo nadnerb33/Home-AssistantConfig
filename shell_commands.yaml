@@ -25,6 +25,7 @@ send_remote_cmd: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND
 switch_freesat_channel: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat {{ sequence }}'
 switch_off_freesat: echo "standby 3" | cec-client -s
 #switch on freesat is done by IR LED / send_remote_cmd above
+fix_kodi: cec-client
 
 #could get this working if you add an SSH command beforehand, or install within docker
 #   turn_off_pi_usb: sudo /home/homeassistant/uhubctl/uhubctl -a off -p 2

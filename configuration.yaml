@@ -13,19 +13,22 @@ homeassistant:
   # Customization file
   customize: !include customisation/customize.yaml
 
+
 # Show links to resources in log and frontend
 #introduction:
 
 # Enables the frontend
 frontend:
 
-
+#need to do this to setup
+#https://community.home-assistant.io/t/device-tracker-luci-invalid-response-from-luci-response-404/18678
+# device_tracker:
+#   - platform: luci
+#     host: 192.168.0.1
+#     username: root
+#     password: !secret router_password
 
 device_tracker:
-  - platform: luci
-    host: 192.168.0.1
-    username: root
-    password: !secret router_password
 
 # Enables configuration UI
 config:
@@ -36,8 +39,8 @@ http:
   ssl_certificate: !secret ssl_certificate 
   ssl_key: !secret ssl_key
   base_url: !secret base_url 
-  ip_ban_enabled: true
-  login_attempts_threshold: 3
+  # ip_ban_enabled: true
+  # login_attempts_threshold: 3
 
 # Checks for available updates
 # Note: This component will send some information about your system to

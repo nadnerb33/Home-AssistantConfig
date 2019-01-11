@@ -45,14 +45,14 @@ brendan:
   view: no
   entities:
     - device_tracker.brendan_nokia
-    - device_tracker.brendan_work_iphone
-    - device_tracker.brendan_work_laptop
+    # - device_tracker.brendan_work_iphone
+    # - device_tracker.brendan_work_laptop
     - device_tracker.brendan_macbook
 
 lauren:
   name: Lauren
   view: no
   entities:
-    - device_tracker.lauren_oneplus_bt_v2
-    - device_tracker.lauren_oneplus_bt
+    # - device_tracker.lauren_oneplus_bt_v2
+    # - device_tracker.lauren_oneplus_bt
     - device_tracker.lauren_oneplus 

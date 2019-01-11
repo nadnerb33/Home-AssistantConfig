@@ -20,10 +20,10 @@
     freesat:
       command_on: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_NUMERIC_0' #could use KEY_POWER, but this will turn off the box if its aready on. 0 will turn on, but not off
       command_off: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_POWER' 
-      # command_off: echo "standby 3" | cec-client -s 
-    #   #network tends to stay up for a while so cant rely on ping
+      #command_off: echo "standby 3" | cec-client -s 
+      #network tends to stay up for a while so cant rely on ping
       #command_state: ping -c 5 192.168.0.32 &> /dev/null && echo 1 || echo 0
-    #   command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/freesat_status.sh' #will return 0 if on and 1 if off
+      #command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/freesat_status.sh' #will return 0 if on and 1 if off
     #tv_rpi:
     #  command_on: ssh osmc@192.168.0.33 "echo 'on 0' | /usr/osmc/bin/cec-client -s"
     #  command_off: ssh osmc@192.168.0.33 "echo 'standby 0' | /usr/osmc/bin/cec-client -s"

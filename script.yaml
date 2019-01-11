@@ -1,3 +1,4 @@
+
 watch_kodi:
   alias: Watch Kodi
   sequence:
@@ -20,9 +21,11 @@ watch_kodi:
 watch_tv:
   alias: Watch TV
   sequence:
-  - service: shell_command.send_remote_cmd
-    data_template:
-        remote_cmd: 'freesat KEY_POWER'
+  - service: switch.turn_on
+    entity_id: switch.freesat
+  # - service: shell_command.send_remote_cmd
+  #   data_template:
+  #       remote_cmd: 'freesat KEY_NUM_1'
   - service: script.turn_on
     entity_id: script.start_living_room
   - service: switch.turn_on
@@ -184,14 +187,14 @@ shutdown_living_room:
     data:
       entity_id: light.tv_leds
       effect: Cinema dim lights
-  - service: switch.turn_off
-    entity_id: switch.freesat
+  - service: media_player.turn_off
+    entity_id: media_player.tv
+  # - service: switch.turn_off
+  #   entity_id: switch.freesat
   - service: shell_command.switch_off_ps4
   - service: media_player.turn_off
-    entity_id: media_player.living_room_tv
-  - service: media_player.turn_off
     entity_id: media_player.yamaha_rxv481d
-  - delay: 00:00:05
+  - delay: 00:00:10
   - service: light.turn_off
     data:
       entity_id: light.tv_leds

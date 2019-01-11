@@ -31,22 +31,28 @@
   condition:
   - condition: time
     after: 07:30
-    before: '22:00'
+    before: '23:59'
   action:
   - service: script.turn_on
     entity_id: script.broadcast_via_googlehome
     data_template:
       variables:
         what: '{% set person = trigger.entity_id.split(''.'')[1] %} {%- macro greeting_sentence(person)
-          -%} {{ [ person + " is in da house!", "Put the kettle on, " ~ person + "
-          is home!",  "Welcome back home " ~ person, "Guess who is home. " ~ person
-          + " is!", person + " is now in the house.", "Welcome Home " ~ person + ".  We
-          have missed you.", "Our home is now complete, rest your head and relax your
-          feet! Welcome Back " ~ person, "Life is like a song, you’re back where you
-          belong. Welcome home " ~ person, "Hey there " ~ person + " Welcome Home!",
-          "Knock Knock. Who is there. " ~ person + " is!", "I know a secret! " ~ person
-          + " is home!" ] | random }} {%- endmacro -%} {{greeting_sentence(person)}}
-
+          -%} 
+          {{ [  
+                "Put the kettle on, " ~ person + "is home!",
+                "Welcome back home " ~ person, 
+                "Guess who is home. " ~ person + " is!",
+                person + " is now in the house.",
+                "Welcome Home " ~ person + ".  We have missed you.", 
+                "Our home is now complete, rest your head and relax your feet! Welcome Back " ~ person, 
+                "Life is like a song, you’re back where you belong. Welcome home " ~ person, 
+                "Hey there " ~ person + " Welcome Home!",
+                "Knock Knock. Who is there. " ~ person + " is!", 
+                "I know a secret! " ~ person + " is home!" 
+              ] | random 
+          }} {%- endmacro -%} 
+          {{greeting_sentence(person)}}
           '
 - alias: Notification Audio - Goodbye Person
   trigger:
@@ -59,7 +65,7 @@
   condition:
   - condition: time
     after: 07:30
-    before: '22:00'
+    before: '23:59'
   action:
   - service: script.turn_on
     entity_id: script.broadcast_via_googlehome

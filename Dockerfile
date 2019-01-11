@@ -22,6 +22,10 @@ RUN ssh-keygen -t rsa -N "" -f /root/.ssh/id_rsa
 RUN cp /root/.ssh/id_rsa.pub /config/
 
 #the contents should now be visible to OSMC and can be appended to /home/osmc/.ssh/authorized_keys
-#to do this, on host run, then delete:
+#to do this, on OSMC run cat command, then delete .pub:
 #sudo cat /home/osmc/homeassistant/id_rsa.pub >> /home/osmc/.ssh/authorized_keys
 #rm /home/osmc/homeassistant/id_rsa.pub
+
+
+#install some python packages
+RUN pip install untangle
