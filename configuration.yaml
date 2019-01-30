@@ -94,6 +94,9 @@ logbook:
       - binary_sensor.pibutton
       - sensor.ssl_expiry
       - sensor.home_eta
+      - sensor.sourdough_heating_status
+      - sensor.sourdough_humidity
+      - sensor.sourdough_temperature
     domains:
       - script
   # ditch a bunch of stuff from here

@@ -30,6 +30,23 @@
     - humidity
   scan_interval: 60
 
+- platform: rest
+  name: Sourdough Temperature
+  unit_of_measurement: "°C"
+  resource: http://esp_6966ca.lan/getTemp
+  scan_interval: 300
+
+- platform: rest
+  name: Sourdough Humidity
+  unit_of_measurement: "%"
+  resource: http://esp_6966ca.lan/getHumidity
+  scan_interval: 300
+
+- platform: rest
+  name: Sourdough Heating Status
+  resource: http://esp_6966ca.lan/getHeatStatus
+  scan_interval: 300
+
 #https://home-assistant.io/components/sensor.cert_expiry/
 - platform: cert_expiry
   host: !secret ssl_host
