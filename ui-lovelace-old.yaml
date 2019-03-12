@@ -1,0 +1,180 @@
+#guide https://www.youtube.com/watch?v=ObfRzMIEJPg&feature=youtu.be
+
+
+
+title: My Home
+# Include external resources
+resources:
+  - url: /local/my-custom-card.js
+    type: js
+  - url: /local/my-webfont.css
+    type: css
+
+# Optional background for all views. Check https://developer.mozilla.org/en-US/docs/Web/CSS/background for more examples.
+#background: center / cover no-repeat url("/background.png") fixed
+# Exclude entities from "Unused entities" view
+excluded_entities:
+  - weblink.router
+views:
+    # View tab title.
+  - title: Home
+    # Optional unique id for direct access /lovelace/${id}
+
+    id: home
+    # Optional background (overwrites the global background).
+    # background: radial-gradient(crimson, skyblue)
+    # Each view can have a different theme applied. Theme should be defined in the frontend.
+    theme: dark-mode
+    # The cards to show on this view.
+    cards:
+        # The filter card will filter entities for their state
+      # - type: entity-filter
+      #   entities:
+      #     - group.brendan
+      #     - group.lauren
+      #   state_filter:
+      #     - home
+      #   card:
+      #     type: glance
+      #     title: Who is home?
+      - type: entities
+        title: Who is home?
+        entities:
+          - group.brendan
+          - group.lauren
+            
+      - type: entity-filter
+        entities: !include active_devices.yaml
+        state_filter:
+          - "on"
+          - "playing"
+          - "idle"
+        card:
+          type: entities
+          title: Active Devices
+      - type: iframe
+        url:  !secret weather_url #https://embed.windy.com/embed2.html
+        aspect_ratio: 100%
+
+
+  - title: Living Room
+    id: living_room
+    cards:
+      - type: horizontal-stack
+        cards:
+        # Entities card will take a list of entities and show their state.
+              # The picture entity card will represent an entity with a picture
+        - type: picture-entity
+          image: /local/hyperion.png
+          entity: light.hyperion
+          name: TV LEDs
+        # - type: picture-entity
+        #   image: /local/fan.png
+        #   entity: switch.tv_unit_fans
+      # - type: sensor
+      #   entity: sensor.tv_unit_temperature
+      #   name: TV Unit Temp
+      #   height: 50
+      #   line_color: "#3498db"
+      #   accuracy: 30
+      - type: gauge
+        title: TV Unit
+        unit_of_measurement: '°C'
+        entity: sensor.tv_unit_temperature
+        severity:
+          green: 10
+          yellow: 28
+          red: 38
+      # - type: sensor
+      #   entity: sensor.tv_unit_humidity
+      #   icon: mdi:water-percent
+      #   name: TV Unit Humidity
+      #   height: 50
+      #   line_color: "#3498db"
+      #   accuracy: 30
+      - type: media-control
+        entity: media_player.kodi
+      - type: media-control
+        entity: media_player.yamaha_rxv481d
+
+
+  - title: RPi
+    id: Rpi
+    type: vertical-stack
+    cards:
+      - type: sensor
+        entity: sensor.cpu_temperature
+        name: CPU Temp
+        height: 45
+        line_color: "#3498db"
+        accuracy: 30
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            title: CPU Usage
+            unit_of_measurement: '%'
+            entity: sensor.processor_use
+            severity:
+              green: 0
+              yellow: 45
+              red: 85
+          - type: gauge
+            title: Memory Usage
+            unit_of_measurement: '%'
+            entity: sensor.memory_use_percent
+            icon: mdi:memory
+            severity:
+              green: 0
+              yellow: 45
+              red: 85
+      - type: entities
+        entities:
+          - entity: sensor.disk_free_
+            icon: mdi:harddisk
+      - type: entities
+        title: Services running on RPi
+        entities:
+          - entity: switch.hyperionservice
+          - entity: switch.kodiservice
+
+
+# ******************* WORKOUTS ********************************************
+    # Specify a tab icon if you want the view tab to be an icon.
+  - icon: mdi:dumbbell
+    # Title of the view. Will be used as the tooltip for tab icon
+    title: Workouts
+    cards:
+        # Entities card will take a list of entities and show their state.
+      - type: entities
+        # Title of the entities card
+        title: Workouts (Play on Dining Room TV)
+        # The entities here will be shown in the same order as specified.
+        # Each entry is an entity ID or a map with extra options.
+        entities:
+          - entity: script.c2w1
+            icon: mdi:dumbbell
+          - entity: script.c2w2
+            icon: mdi:dumbbell
+          - entity: script.c2w3
+            icon: mdi:dumbbell
+          - entity: script.c2w4
+            icon: mdi:dumbbell
+          - entity: script.c2w5
+            icon: mdi:dumbbell
+      - type: iframe
+        title: Meal Plan
+        url: !secret mealplan_url
+        aspect_ratio: 100%
+
+  - title: Scripts
+    # Title of the view. Will be used as the tooltip for tab icon
+    cards:
+      - type: entities
+        title: Who is home?
+        domain:
+          - script
+        # The markdown card will render markdown text.
+      # - type: markdown
+      #   title: Markdown
+      #   content: >
+      #     Welcome to your **Lovelace UI**.

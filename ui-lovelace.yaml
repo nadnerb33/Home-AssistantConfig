@@ -1,180 +1,222 @@
-#guide https://www.youtube.com/watch?v=ObfRzMIEJPg&feature=youtu.be
+# to do
+# - add uptime to RPI page
+# - page with everything that is on
+# - cant switch between sources within 1 min..
+#   add timer from when TV is turned on for 1 min, then only run 
+#   the RXV scripts if TV was recently switcjed on
 
-
-
-title: My Home
-# Include external resources
-resources:
-  - url: /local/my-custom-card.js
-    type: js
-  - url: /local/my-webfont.css
-    type: css
-
-# Optional background for all views. Check https://developer.mozilla.org/en-US/docs/Web/CSS/background for more examples.
-#background: center / cover no-repeat url("/background.png") fixed
-# Exclude entities from "Unused entities" view
-excluded_entities:
-  - weblink.router
+title: Home
 views:
-    # View tab title.
+######## Home ########
   - title: Home
-    # Optional unique id for direct access /lovelace/${id}
-
-    id: home
-    # Optional background (overwrites the global background).
-    # background: radial-gradient(crimson, skyblue)
-    # Each view can have a different theme applied. Theme should be defined in the frontend.
-    theme: dark-mode
-    # The cards to show on this view.
+    icon: 'mdi:home'
+    path: home
+    badges:
+      - binary_sensor.south_view_road_away
+      - sensor.tv_unit_humidity
+      - sensor.tv_unit_temperature
+      - sensor.ssl_expiry
     cards:
-        # The filter card will filter entities for their state
-      # - type: entity-filter
-      #   entities:
-      #     - group.brendan
-      #     - group.lauren
-      #   state_filter:
-      #     - home
-      #   card:
-      #     type: glance
-      #     title: Who is home?
-      - type: entities
-        title: Who is home?
-        entities:
+      - entities:
           - group.brendan
           - group.lauren
-            
-      - type: entity-filter
-        entities: !include active_devices.yaml
-        state_filter:
-          - "on"
-          - "playing"
-          - "idle"
-        card:
-          type: entities
-          title: Active Devices
-      - type: iframe
-        url:  !secret weather_url #https://embed.windy.com/embed2.html
-        aspect_ratio: 100%
+        show_name: true
+        show_state: true
+        theme: Backend-selected
+        title: Who is home?
+        type: glance
+      
+      - entity: climate.dining_room
+        type: thermostat
+      - title: Light
+        type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.hyperion
+          - entity: light.kitchen_units
+          - entity: light.extractor_fan
+          - entity: light.living_room_lamp
+          - entity: light.bedroom_lamp
+      - entity: media_player.tv
+        type: media-control
+      - entity: media_player.yamaha_rxv481d
+        type: media-control
+      - entity: media_player.kodi
+        type: media-control
+      - entity: media_player.playstation_4
+        type: media-control
+      - entity: media_player.chromecast_dining_room
+        type: media-control
+      - entity: media_player.google_home_dining_room
+        type: media-control
+      - entity: media_player.google_home_living_room
+        type: media-control
+      - title: Switch
+        type: entities
+        show_header_toggle: false
+        entities:
+          - entity: switch.ps4
+          - entity: switch.rxv481d
+          - entity: switch.tv
+          - entity: switch.hyperionservice
+          - entity: switch.freesat
+          - entity: switch.kodiservice
+          - entity: switch.wol_nas
+          - entity: switch.fans
+          - entity: switch.living_room_power
 
 
+######## Living Room ########
   - title: Living Room
-    id: living_room
+    icon: 'mdi:sofa'
+    path: livingroom
+    theme: Backend-selected
+    badges: []
     cards:
       - type: horizontal-stack
         cards:
-        # Entities card will take a list of entities and show their state.
-              # The picture entity card will represent an entity with a picture
-        - type: picture-entity
-          image: /local/hyperion.png
-          entity: light.hyperion
-          name: TV LEDs
-        # - type: picture-entity
-        #   image: /local/fan.png
-        #   entity: switch.tv_unit_fans
-      # - type: sensor
-      #   entity: sensor.tv_unit_temperature
-      #   name: TV Unit Temp
-      #   height: 50
-      #   line_color: "#3498db"
-      #   accuracy: 30
-      - type: gauge
-        title: TV Unit
-        unit_of_measurement: '°C'
-        entity: sensor.tv_unit_temperature
-        severity:
-          green: 10
-          yellow: 28
-          red: 38
-      # - type: sensor
-      #   entity: sensor.tv_unit_humidity
-      #   icon: mdi:water-percent
-      #   name: TV Unit Humidity
-      #   height: 50
-      #   line_color: "#3498db"
-      #   accuracy: 30
-      - type: media-control
-        entity: media_player.kodi
-      - type: media-control
-        entity: media_player.yamaha_rxv481d
+          - type: entity-button
+            entity: light.living_room_lamp
+            name: Lamp
+            tap_action:
+              action: call-service
+              service: light.toggle
+              service_data:
+                entity_id: light.living_room_lamp
+          - type: entity-button
+            entity: switch.living_room_power
+            name: Power Socket
+            tap_action:
+              action: call-service
+              service: switch.toggle
+              service_data:
+                entity_id: switch.living_room_power
+      - type: picture-entity
+        image: /local/hyperion.png
+        entity: light.hyperion
+        name: TV LEDs
 
+######## Kitchen ########
+  - title: Kitchen
+    icon: 'mdi:coffee'
+    path: kitchen
+    theme: Backend-selected
+    badges: []
+    cards:
+      - type: light
+        entity: light.kitchen_lights
+        name: Lights  
+      - type: glance
+        entities:
+          - entity: light.kitchen_units
+            tap_action:
+              action: toggle
+          - entity: light.extractor_fan
+            tap_action:
+              action: toggle
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.sourdough_status
+            state: "on"
+        card:
+          type: picture-glance
+          title: Sourdough Starter
+          entities:
+            - sensor.sourdough_temperature
+            - sensor.sourdough_heating_status
+            - sensor.sourdough_humidity
+          image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.sourdough_status
+            state: "off"
+        card:
+          type: picture-entity
+          name: Sourdough Starter
+          entity:  binary_sensor.sourdough_status
+          image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
 
-  - title: RPi
-    id: Rpi
+######## Automations & Scripts ########
+  - title: Automations & Scripts
+    icon: 'mdi:auto-fix'
+    path: autoscripts
+    theme: Backend-selected
+    badges: []
+    cards:
+      - type: entities
+        title: Scripts
+        show_header_toggle: false
+        entities:
+          - script.shutdown_living_room
+          - script.watch_kodi
+          - script.wake_rxv481d
+          - script.watch_tv
+          - script.wake_rxv481d_action
+          - script.play_ps4
+          - script.wake_rxv481d_loop
+          - script.play_vinyl
+          # - script.broadcast_via_googlehome
+          - script.update_kodi_library
+          - script.start_living_room
+          # - script.ps4_start_x
+          # - script.yamaha_source_x
+          # - script.yamaha_mute
+          # - script.freesat_channel_x
+      - type: entities
+        title: Automations
+        show_header_toggle: false
+        entities:
+          - automation.switch_off_fans_when_tv_unit_is_cool
+          - automation.notification_audio__welcome_home_person
+          - automation.switch_on_fans_when_tv_unit_is_hot
+          - automation.notification_audio__goodbye_person
+
+######## Raspberry Pi ########
+  - title: Raspberry Pi
+    icon: 'mdi:chip'
+    path: raspberrypi
+    theme: Backend-selected
     type: vertical-stack
     cards:
-      - type: sensor
-        entity: sensor.cpu_temperature
-        name: CPU Temp
-        height: 45
-        line_color: "#3498db"
-        accuracy: 30
       - type: horizontal-stack
         cards:
           - type: gauge
-            title: CPU Usage
-            unit_of_measurement: '%'
+            name: CPU
             entity: sensor.processor_use
             severity:
               green: 0
-              yellow: 45
-              red: 85
+              yellow: 50
+              red: 75
           - type: gauge
-            title: Memory Usage
-            unit_of_measurement: '%'
+            name: Memory Use
             entity: sensor.memory_use_percent
             icon: mdi:memory
             severity:
               green: 0
-              yellow: 45
-              red: 85
+              yellow: 50
+              red: 75
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Disk Use
+            entity: sensor.disk_use_percent_
+            unit: 'GB'
+            severity:
+              green: 0
+              yellow: 70
+              red: 90  
+          - type: gauge
+            name: CPU
+            entity: sensor.cpu_temperature
+            severity:
+              green: 40
+              yellow: 55
+              red: 65
+            min: 20
+            max: 80
       - type: entities
-        entities:
-          - entity: sensor.disk_free_
-            icon: mdi:harddisk
-      - type: entities
-        title: Services running on RPi
+        title: Services
+        show_header_toggle: false
         entities:
           - entity: switch.hyperionservice
           - entity: switch.kodiservice
-
-
-# ******************* WORKOUTS ********************************************
-    # Specify a tab icon if you want the view tab to be an icon.
-  - icon: mdi:dumbbell
-    # Title of the view. Will be used as the tooltip for tab icon
-    title: Workouts
-    cards:
-        # Entities card will take a list of entities and show their state.
-      - type: entities
-        # Title of the entities card
-        title: Workouts (Play on Dining Room TV)
-        # The entities here will be shown in the same order as specified.
-        # Each entry is an entity ID or a map with extra options.
-        entities:
-          - entity: script.c2w1
-            icon: mdi:dumbbell
-          - entity: script.c2w2
-            icon: mdi:dumbbell
-          - entity: script.c2w3
-            icon: mdi:dumbbell
-          - entity: script.c2w4
-            icon: mdi:dumbbell
-          - entity: script.c2w5
-            icon: mdi:dumbbell
-      - type: iframe
-        title: Meal Plan
-        url: !secret mealplan_url
-        aspect_ratio: 100%
-
-  - title: Scripts
-    # Title of the view. Will be used as the tooltip for tab icon
-    cards:
-      - type: entities
-        title: Who is home?
-        domain:
-          - script
-        # The markdown card will render markdown text.
-      # - type: markdown
-      #   title: Markdown
-      #   content: >
-      #     Welcome to your **Lovelace UI**.

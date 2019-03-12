@@ -2,7 +2,7 @@
 #system monitor
 - platform: systemmonitor
   resources:
-    - type: disk_free
+    - type: disk_use_percent
       arg: /
     - type: memory_use_percent
     # - type: memory_free
@@ -20,6 +20,8 @@
   command: "du -m /config/home-assistant_v2.db | cut -f1"
   unit_of_measurement: 'MB'
   value_template: '{{ value | int - 1 }}'
+
+- platform: uptime
 
 - platform: dht
   name: TV Unit

@@ -112,6 +112,14 @@ light:
   - platform: hyperion
     host: 192.168.0.33
     default_color: [255,0,255]
+  - platform: group
+    name: Kitchen Lights
+    entities:
+      - light.kitchen_units
+      - light.extractor_fan
+
+tradfri:
+  host: 192.168.0.11
 
 # binary_sensor:
 #     platform: rpi_gpio
@@ -120,6 +128,12 @@ light:
 #     value_high: "On"
 #     value_low: "Off"
 #     invert_logic: true
+
+binary_sensor:
+  - platform: ping
+    name: Sourdough Status
+    host: 192.168.0.78
+    # scan_interval: 30 # default is 5 mins
 
 shell_command: !include shell_commands.yaml
 
@@ -153,8 +167,8 @@ google_assistant:
 tts:
   - platform: google
 
-# Cloud
-#cloud:
+lovelace:
+  mode: yaml
 
 media_player: !include media_players.yaml
 sensor: !include sensors.yaml
@@ -162,5 +176,5 @@ switch: !include switches.yaml
 group: !include groups.yaml
 automation: !include automations.yaml
 #script: !include_dir_merge_named scripts/
-script: !include script.yaml
+script: !include scripts.yaml
 panel_iframe: !include panels.yaml

@@ -173,5 +173,23 @@ group.lauren:
   entity_picture: !secret lauren_image
 
 
-#---------- ADDED BY GUI ----------------
+#---------- SOURDOUGH ----------------
+sensor.sourdough_heating_status:
+  icon: mdi:fire
+sensor.sourdough_humidity:
+  icon: mdi:water-percent
+sensor.sourdough_temperature:
+  icon: mdi:thermometer
+
+#---------- LIGHTS ----------------
+light.tradfri_driver:
+  friendly_name: Kitchen Units
+light.lamp:
+  friendly_name: Living Room Lamp
+  icon: mdi:lightbulb
+
+
+switch.tradfri_outlet:
+  friendly_name: Tradfri
+  icon: mdi:power-socket-uk
 

@@ -1,8 +1,7 @@
+
 watch_kodi:
   alias: Watch Kodi
   sequence:
-  - service: shell_command.start_kodi
-  - service: shell_command.start_hyperiond
   - service: script.turn_on
     entity_id: script.start_living_room
   - service: switch.turn_on
@@ -10,9 +9,9 @@ watch_kodi:
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
-  - service: script.wake_rxv481d
-    data:
+  - data:
       source: Kodi
+    service: script.wake_rxv481d
   - service: light.turn_on
     data:
       entity_id: light.hyperion
@@ -21,29 +20,24 @@ watch_kodi:
 watch_tv:
   alias: Watch TV
   sequence:
-  - service: shell_command.send_remote_cmd
-    data_template:
-        remote_cmd: 'freesat KEY_POWER'
+  - service: switch.turn_on
+    entity_id: switch.freesat
   - service: script.turn_on
     entity_id: script.start_living_room
   - service: switch.turn_on
     entity_id: switch.living_room_power
-  - service: switch.turn_on
-    entity_id: switch.tradfri_outlet
   - service: light.turn_on
     data:
       entity_id: light.hyperion
-  - service: light.turn_on
-    data:
-      entity_id: light.hyperion
-      rgb_color: [255,0,0]
+      rgb_color: [0,167,247]
       brightness: 150
-  - service: script.wake_rxv481d
-    data:
+  - data:
       source: Freesat
+    service: script.wake_rxv481d
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
+
 
 play_ps4:
   alias: Play PS4
@@ -52,26 +46,44 @@ play_ps4:
     entity_id: script.start_living_room
   - service: switch.turn_on
     entity_id: switch.living_room_power
-  - service: shell_command.switch_on_ps4
+  - service: shell_command.switch_on_ps4 #add condition so this only runs if PS4 is off
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
- - service: light.turn_on
-    data:
-      entity_id: light.hyperion
   - service: light.turn_on
     data:
       entity_id: light.hyperion
       rgb_color: [0,167,247]
       brightness: 150
-  - service: script.wake_rxv481d
-    data:
+  - data:
       source: PS4
+    service: script.wake_rxv481d
 
-#this only runs if living room power isnt on yet, it just flashes the LEDs as this is the first time it starts.
+play_vinyl:
+  alias: Play vinyl
+  sequence:
+  - service: switch.turn_on
+    entity_id: switch.living_room_power
+  - data:
+      source: Vinyl
+    service: script.wake_rxv481d
+
+
+update_kodi_library:
+  alias: Update Kodi Library
+  sequence:
+  - alias: Call Kodi update
+    service: media_player.kodi_call_method
+    data:
+      entity_id: media_player.kodi
+      method: VideoLibrary.Scan
+
 start_living_room:
+  #this only runs if living room power isnt on yet, it just flashes the LEDs as this is the first time it starts.
   alias: Start Living Room
   sequence:
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
   - condition: state
     entity_id: switch.living_room_power
     state: 'off'  
@@ -79,7 +91,6 @@ start_living_room:
     data:
       entity_id: light.hyperion
       effect: Rainbow swirl fast
-
 
 ps4_start_x:
   alias: PS4 Start X
@@ -93,7 +104,73 @@ ps4_start_x:
         {% elif (title == "YouTube") %}  CUSA01116
         {% elif (title == "Yakuza 0") %} CUSA05133
         {% elif (title == "Inside") %}   CUSA02754
+        {% elif (title == "In Side") %}  CUSA02754
+        {% elif (title == "Inside") %}   CUSA02754
+        {% elif (title == "Shenmue") %}   ???
+        {% elif (title == "Shenmue 2") %}   ???
         {% endif %}
+
+yamaha_source_x:
+  alias: Switch Yamaha Source
+  sequence:
+  - service: media_player.select_source
+    entity_id: media_player.yamaha_rxv481d
+    # we need to account for variations in Google's spelling of the spoken phrases
+    data_template:
+      source: >
+        {% if   (source == "PS 4")          %} PS4
+        {% elif (source == "Playstation 4") %} PS4
+        {% elif (source == "HDMI 1")        %} HDMI1
+        {% elif (source == "HDMI 2")        %} HDMI2
+        {% elif (source == "HDMI 3")        %} HDMI3
+        {% elif (source == "HDMI 4")        %} HDMI4
+        {% elif (source == "kodi")          %} HDMI3
+        {% elif (source == "FREESAT")       %} HDMI2
+        {% elif (source == "freezer")       %} HDMI2
+        {% elif (source == "AV 3")          %} AV3
+        {% elif (source == "AV free")       %} AV3
+        {% elif (source == "rhino")         %} AV3
+        {% elif (source == "vinyl")         %} AV3
+        {% else %} {{source}}
+        {% endif %}
+
+yamaha_mute:
+  alias: Mute Yamaha
+  sequence:
+  - service: media_player.volume_mute
+    entity_id: media_player.yamaha_rxv481d
+    data_template:
+      is_volume_muted: >
+        {% if (state_attr('media_player.yamaha_rxv481d' , 'is_volume_muted') == false)   %} true
+        {% else  %} false
+        {% endif %}
+
+freesat_channel_x:
+  alias: Switch Freesat Channel
+  sequence:
+    # we need to account for variations in Google's spelling of the spoken phrases
+  - service: shell_command.switch_freesat_channel
+    data_template:
+      sequence: >
+        {% if   (channel.upper() == "BBC 1") %} 1 0 6
+        {% elif (channel.upper() == "BBC 2") %} 1 0 2
+        {% elif (channel.upper() == "BBC 4") %} 1 0 7
+        {% elif (channel.upper() == "CHANNEL 4") %} 1 0 4
+        {% elif (channel.upper() == "CHANNEL 5") %} 1 0 5
+        {% elif (channel.upper() == "ITV") %} 1 1 1
+        {% elif (channel.upper() == "NHK") %} 2 0 9
+        {% elif (channel.upper() == "BBC NEWS") %} 2 0 0
+        {% elif (channel.upper() == "SKY NEWS") %} 20 2
+        {% elif (channel.upper() == "PAUSE") %} Pause
+        {% elif (channel.upper() == "PLAY") %} Play
+        {% elif (channel.upper() == "RESUME") %} Play
+        {% elif (channel.upper() == "RECORD") %} Record
+        {% elif (channel.upper() == "MUTE") %} Mute
+        {% elif (channel.upper() == "UNMUTE") %} Mute
+        {% elif (channel.upper() == "INFO") %} i i ; sleep 8; irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat Exit
+        {% else %} {{channel|title}}
+        {% endif %}
+
 
 shutdown_living_room:
   alias: Shutdown Living Room
@@ -106,24 +183,24 @@ shutdown_living_room:
   - service: light.turn_on
     data:
       entity_id: light.hyperion
-      effect: Cinema dim lights
+      effect: Rainbow swirl slow
+  - service: media_player.turn_off
+    entity_id: media_player.tv
+  # - service: switch.turn_off
+  #   entity_id: switch.freesat
   - service: shell_command.switch_off_ps4
   - service: media_player.turn_off
-    entity_id: media_player.living_room_tv
-  - service: media_player.turn_off
     entity_id: media_player.yamaha_rxv481d
-  - delay: 00:00:05
+  - delay: 00:00:10
   - service: light.turn_off
     data:
       entity_id: light.hyperion
   #- service: shell_command.stop_hyperiond
-  - service: shell_command.stop_kodi 
+  # - service: shell_command.stop_kodi 
   - service: switch.turn_off
     entity_id: switch.living_room_power
-  - delay: 00:00:05
-  - service: switch.turn_off
-    entity_id: switch.tradfri_outlet
-
+  - service: light.turn_off
+    entity_id: light.living_room_lamp
 
 # wtf is going on here? Well, these scripts fix some issues with the AVR.
 # firstly, the AVR is only accesible to HA if it was on(or in standby) when HA first booted.
@@ -141,15 +218,15 @@ wake_rxv481d:
   # - data_template:
   #     source: '{{source}}'
   #   service: script.wake_rxv481d_action
-  # - service: media_player.turn_on
-  #   entity_id: media_player.yamaha_rxv481d
+  - service: media_player.turn_on
+    entity_id: media_player.yamaha_rxv481d
   - service: media_player.select_source
     entity_id: media_player.yamaha_rxv481d
     data_template:
       source: '{{source}}'
-  - condition: state
-    entity_id: media_player.yamaha_rxv481d
-    state: 'off'
+  - service: switch.turn_on
+    data:
+      entity_id: switch.led
   - wait_template: "{{ source != state_attr('media_player.yamaha_rxv481d' , 'source') }}" 
     timeout: 00:00:30
   #set source again
@@ -164,6 +241,9 @@ wake_rxv481d:
     entity_id: media_player.yamaha_rxv481d
     data_template:
       source: '{{source}}'    
+  - service: switch.turn_off
+    data:
+      entity_id: switch.led
 
 #No2. this is called by script no1.
 # if the avr is on, then it will set the source and stop
@@ -173,16 +253,25 @@ wake_rxv481d:
 wake_rxv481d_action:
   alias: Wake Yamaha RXV481D
   sequence:
+  - service: switch.turn_off
+    data:
+      entity_id: switch.led
+  - service: hdmi_cec.power_on
+    data:
+      device: 2.0.0.0
   - service: media_player.turn_on
     entity_id: media_player.yamaha_rxv481d
   - service: media_player.select_source
-    entity_id: media_player.yamaha_rxv481d
+    # entity_id: media_player.yamaha_rxv481d
     data_template:
       source: '{{source}}'
   #was the switch on successful? if so quit, if not, continue
   - condition: state
     entity_id: media_player.yamaha_rxv481d
     state: 'off'
+  # - service: switch.turn_on
+  #   data:
+  #     entity_id: switch.led
   - delay: 00:00:03
   - data_template:
       source: '{{source}}'
@@ -192,7 +281,13 @@ wake_rxv481d_action:
 wake_rxv481d_loop:
   alias: Wake Yamaha RXV481D again
   sequence:
+  - service: switch.turn_off
+    data:
+      entity_id: switch.led
   - delay: 00:00:02
+  - service: switch.turn_on
+    data:
+      entity_id: switch.led
   - data_template:
       source: '{{source}}'
     service: script.wake_rxv481d
@@ -209,17 +304,4 @@ broadcast_via_googlehome:
       data_template:
         entity_id: media_player.google_home_dining_room
         message: "{{ what }}"
-
-
-
-
-update_kodi_library:
-  alias: Update Kodi Library
-  sequence:
-  - alias: Call Kodi update
-    service: media_player.kodi_call_method
-    data:
-      entity_id: media_player.kodi
-      method: VideoLibrary.Scan
-
 

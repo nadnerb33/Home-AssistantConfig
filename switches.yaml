@@ -84,7 +84,7 @@
 
 - platform: rpi_gpio
   ports:
-    21: led #number on picase
+    # 21: led #number on picase
     26: Fans #tv unit
 
 
