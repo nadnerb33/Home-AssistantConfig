@@ -35,7 +35,7 @@
 
 - platform: ps4
   host: 192.168.0.44
-  cmd: /usr/bin/ps4-waker -c /config/.ps4-wake.credentials.json 
-  filename: /config/.ps4-wake.credentials.json
+  cmd: /usr/bin/ps4-waker -c /config/ps4-wake.credentials.json 
+  filename: /config/ps4-wake.credentials.json
   games_filename: /config/ps4-games.json
 
