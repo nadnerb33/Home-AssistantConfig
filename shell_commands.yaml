@@ -7,9 +7,9 @@ update_duckdns: !secret update_duckdns
 # switch_on_ps4:  ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000'
 # switch_off_ps4: ssh osmc@192.168.0.33 'ps4-waker -c /home/osmc/homeassistant/ps4-wake.credentials.json -d 192.168.0.44 -t 5000 standby'
 
-switch_on_ps4:  ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000
-switch_off_ps4: ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000 standby
-start_ps4_app: 'ps4-waker -c /config/.ps4-wake.credentials.json  -t 5000 start {{ app_id }}'
+switch_on_ps4:  ps4-waker -c /config/ps4-wake.credentials.json  -t 5000
+switch_off_ps4: ps4-waker -c /config/ps4-wake.credentials.json  -t 5000 standby
+start_ps4_app: 'ps4-waker -c /config/ps4-wake.credentials.json  -t 5000 start {{ app_id }}'
 
 #These require ssh/key login to be set up beforehand so HA can SSH into OSMC without password
 status_kodi: ssh osmc@192.168.0.33 'sudo systemctl restart mediacenter'

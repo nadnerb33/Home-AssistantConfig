@@ -158,13 +158,6 @@ sensor.tv_unit_temperature:
   friendly_name: TV Unit Temp
 sensor.home_eta:
   hidden: true
-sensor.sourdough_heating_status:
-  icon: mdi:fire
-sensor.sourdough_humidity:
-  icon: mdi:water-percent
-sensor.sourdough_temperature:
-  icon: mdi:thermometer
-
 
 #---------- GROUPS ----------------
 group.brendan:

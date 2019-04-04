@@ -100,15 +100,14 @@ ps4_start_x:
   - service: shell_command.start_ps4_app
     data_template:
       app_id: >
-        {% if (title == "Netflix") %}    CUSA00127
-        {% elif (title == "YouTube") %}  CUSA01116
-        {% elif (title == "Yakuza 0") %} CUSA05133
-        {% elif (title == "Inside") %}   CUSA02754
-        {% elif (title == "In Side") %}  CUSA02754
-        {% elif (title == "Inside") %}   CUSA02754
-        {% elif (title == "Shenmue") %}  CUSA08355
-        {% elif (title == "Shenmue 2") %}CUSA08356
-        {% elif (title == "iPlayer") %}CUSA00122
+        {% if   (title == "Netflix")   %}  CUSA00127
+        {% elif (title == "YouTube")   %}  CUSA01116
+        {% elif (title == "Yakuza 0")  %}  CUSA05133
+        {% elif (title == "Inside")    %}  CUSA02754
+        {% elif (title == "In Side")   %}  CUSA02754
+        {% elif (title == "Shenmue")   %}  CUSA08355
+        {% elif (title == "Shenmue 2") %}  CUSA08356
+        {% elif (title == "iPlayer")   %}  CUSA00122
         {% endif %}
 
 yamaha_volume_x:
