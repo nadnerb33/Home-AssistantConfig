@@ -106,8 +106,24 @@ ps4_start_x:
         {% elif (title == "Inside") %}   CUSA02754
         {% elif (title == "In Side") %}  CUSA02754
         {% elif (title == "Inside") %}   CUSA02754
-        {% elif (title == "Shenmue") %}   ???
-        {% elif (title == "Shenmue 2") %}   ???
+        {% elif (title == "Shenmue") %}  CUSA08355
+        {% elif (title == "Shenmue 2") %}CUSA08356
+        {% elif (title == "iPlayer") %}CUSA00122
+        {% endif %}
+
+yamaha_volume_x:
+  alias: Change Yamaha Volume
+  sequence:
+  - service: media_player.volume_set
+    entity_id: media_player.yamaha_rxv481d
+    data_template:
+      volume_level: >
+        {% if   (vol == "30") %} 0.7
+        {% elif (vol == "35") %} 0.65
+        {% elif (vol == "40") %} 0.6
+        {% elif (vol == "45") %} 0.55
+        {% elif (vol == "50") %} 0.5
+        {% elif (vol == "55") %} 0.45
         {% endif %}
 
 yamaha_source_x:
