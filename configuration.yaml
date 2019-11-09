@@ -104,9 +104,9 @@ logbook:
 # Enables a map showing the location of tracked devices
 map:
 
-nest:
-  client_id: !secret client_id
-  client_secret: !secret client_secret
+#nest:
+#  client_id: !secret client_id
+#  client_secret: !secret client_secret
 
 light:
   - platform: hyperion
@@ -118,8 +118,8 @@ light:
       - light.kitchen_units
       - light.extractor_fan
 
-tradfri:
-  host: 192.168.0.11
+#tradfri:
+#  host: 192.168.0.11
 
 # binary_sensor:
 #     platform: rpi_gpio

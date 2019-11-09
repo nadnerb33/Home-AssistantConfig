@@ -2,7 +2,7 @@
 transmission:
   title: 'Transmission'
   icon: mdi:download
-  url: 'http://192.168.0.10:9091'
+  url: 'http://nadnerb.duckdns.org:9091'
 
 kodi:
   title: 'Kodi'

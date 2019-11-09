@@ -108,6 +108,9 @@ ps4_start_x:
         {% elif (title == "Shenmue")   %}  CUSA08355
         {% elif (title == "Shenmue 2") %}  CUSA08356
         {% elif (title == "iPlayer")   %}  CUSA00122
+        {% elif (title.lower() == "red dead 2")%}  CUSA08519
+        {% elif (title == "Red Dead Redemption 2") %}  CUSA08519
+
         {% endif %}
 
 yamaha_volume_x:
