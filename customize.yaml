@@ -185,3 +185,6 @@ person.lauren:
 # switch.tradfri_outlet:
 #   friendly_name: Tradfri
 #   icon: mdi:power-socket-uk
+
+cover.garage_door:
+  icon: mdi:garage

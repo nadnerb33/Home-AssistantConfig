@@ -30,7 +30,7 @@
   monitored_conditions:
     - temperature
     - humidity
-  scan_interval: 60
+  scan_interval: 300
 
 # - platform: rest
 #   name: Sourdough Temperature

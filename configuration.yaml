@@ -79,7 +79,7 @@ cover:
     state_open: "open"
     state_closed: "closed"
     payload_available: "online"
-    payload_not_available: "offline"
+    payload_not_available: "offline_nope"
 
 binary_sensor:
   - platform: mqtt
