@@ -1,0 +1,249 @@
+# to do
+# - add uptime to RPI page
+# - page with everything that is on
+# - cant switch between sources within 1 min..
+#   add timer from when TV is turned on for 1 min, then only run 
+#   the RXV scripts if TV was recently switcjed on
+
+title: Home
+views:
+######## Home ########
+  - title: Home
+    icon: 'mdi:home'
+    path: home
+    badges:
+      - sensor.living_room_humidity
+      - sensor.living_room_temperature
+      # - sensor.ssl_expiry
+    cards:
+      - entities:
+          - person.nadnerb
+          - person.lauren
+        show_name: true
+        show_state: true
+        theme: Backend-selected
+        title: Who is home?
+        type: glance
+      
+      - title: Light
+        type: entities
+        show_header_toggle: false
+        entities:
+          - entity: light.living_room_lamp
+          - entity: light.living_room_lamp_2
+          - entity: switch.tradfri_outlet
+      - entity: media_player.tv
+        type: media-control
+# could add a source of RXV to a card like this
+# https://community.home-assistant.io/t/lovelace-picture-glance-state-image-broken/61820/2
+      - entity: media_player.yamaha_rxv481d
+        type: media-control
+      - entity: media_player.kodi
+        type: media-control
+      - entity: media_player.playstation_4
+        type: media-control
+      # - entity: media_player.chromecast_dining_room
+      #   type: media-control
+      - entity: media_player.kitchen_speaker
+        type: media-control
+      - entity: media_player.living_room_speaker
+        type: media-control
+      - title: Switch
+        type: entities
+        show_header_toggle: false
+        entities:
+          # - entity: switch.ps4
+          - entity: switch.rxv481d
+          - entity: switch.tv
+          - entity: switch.freesat
+          - entity: switch.kodiservice
+          - entity: switch.wol_nas
+          - entity: switch.living_room_power
+          - entity: switch.tradfri_outlet
+
+
+######## Living Room ########
+  - title: Living Room
+    icon: 'mdi:sofa'
+    path: livingroom
+    theme: Backend-selected
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: light.living_room_lamp
+            name: Lamp (Left)
+            tap_action:
+              action: call-service
+              service: light.toggle
+              service_data:
+                entity_id: light.living_room_lamp
+          - type: entity-button
+            entity: light.living_room_lamp_2
+            name: Lamp (Right)
+            tap_action:
+              action: call-service
+              service: light.toggle
+              service_data:
+                entity_id: light.living_room_lamp_2
+          - type: entity-button
+            entity: switch.living_room_power
+            name: Power Socket
+            tap_action:
+              action: call-service
+              service: switch.toggle
+              service_data:
+                entity_id: switch.living_room_power
+      # - type: picture-entity
+      #   image: /local/hyperion.png
+      #   entity: light.hyperion
+      #   name: TV LEDs
+
+######## Kitchen ########
+  - title: Kitchen
+    icon: 'mdi:coffee'
+    path: kitchen
+    theme: Backend-selected
+    badges: []
+    cards:
+      # - type: light
+      #   entity: light.kitchen_lights
+      #   name: Lights  
+      # - type: glance
+      #   entities:
+      #     - entity: light.kitchen_units
+      #       tap_action:
+      #         action: toggle
+      #     - entity: light.extractor_fan
+      #       tap_action:
+      #         action: toggle
+      # - type: conditional
+        # conditions:
+        #   - entity: binary_sensor.sourdough_status
+        #     state: "on"
+      - type: picture-glance
+        title: Sourdough Starter
+        entities:
+          - sensor.sourdough_temperature
+          - sensor.sourdough_heating_status
+          - sensor.sourdough_humidity
+        image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
+      # - type: conditional
+      #   conditions:
+      #     - entity: binary_sensor.sourdough_status
+      #       state: "off"
+      #   card:
+      #     type: picture-entity
+      #     name: Sourdough Starter
+      #     entity:  binary_sensor.sourdough_status
+      #     image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
+
+######## Automations & Scripts ########
+  - title: Automations & Scripts
+    icon: 'mdi:auto-fix'
+    path: autoscripts
+    theme: Backend-selected
+    badges: []
+    cards:
+      - type: entities
+        title: Scripts
+        show_header_toggle: false
+        entities:
+          - script.shutdown_living_room
+          - script.watch_kodi
+          - script.wake_rxv481d
+          - script.watch_tv
+          - script.wake_rxv481d_action
+          - script.play_ps4
+          - script.wake_rxv481d_loop
+          - script.play_vinyl
+          # - script.broadcast_via_googlehome
+          - script.update_kodi_library
+          - script.start_living_room
+          # - script.ps4_start_x
+          # - script.yamaha_source_x
+          # - script.yamaha_mute
+          # - script.freesat_channel_x
+      - type: entities
+        title: Automations
+        show_header_toggle: false
+        entities:
+          - automation.switch_off_fans_when_tv_unit_is_cool
+          - automation.notification_audio__welcome_home_person
+          - automation.switch_on_fans_when_tv_unit_is_hot
+          - automation.notification_audio__goodbye_person
+
+######## Raspberry Pi ########
+  - title: Raspberry Pi
+    icon: 'mdi:chip'
+    path: raspberrypi
+    theme: Backend-selected
+    type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: CPU
+            entity: sensor.processor_use
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+          - type: gauge
+            name: Memory Use
+            entity: sensor.memory_use_percent
+            icon: mdi:memory
+            severity:
+              green: 0
+              yellow: 50
+              red: 75
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Disk Use
+            entity: sensor.disk_use_percent
+            unit: 'GB'
+            severity:
+              green: 0
+              yellow: 70
+              red: 90  
+          - type: gauge
+            name: CPU
+            entity: sensor.cpu_temperature
+            severity:
+              green: 40
+              yellow: 55
+              red: 65
+            min: 20
+            max: 80
+      - type: entities
+        title: Services
+        show_header_toggle: false
+        entities:
+          # - entity: switch.hyperionservice
+          - entity: switch.kodiservice
+
+######## Garage ########
+  - title: Garage
+    icon: 'mdi:garage'
+    path: garage
+    theme: Backend-selected
+    type: vertical-stack
+    cards:
+      - type: picture-glance
+        title: Garage
+        entities:
+          - binary_sensor.garage_door
+          - cover.garage_door
+        state_image:
+          "on": "https://nadnerb.duckdns.org:8123/local/garage_open.jpg"
+          "off": /local/garage_closed.jpg
+        entity: binary_sensor.garage_door
+      # - entities:
+      #     - binary_sensor.garage_door
+      #   show_name: false
+      #   show_state: true
+      #   theme: Backend-selected
+      #   title: Garage
+      #   type: glance

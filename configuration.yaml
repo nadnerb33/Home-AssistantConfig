@@ -1,0 +1,174 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# customize: !include customize.yaml
+
+recorder:
+  purge_keep_days: 2
+  purge_interval: 2
+  exclude:
+    entities:
+      - sensor.processor_use
+      - sensor.memory_use_percent
+      # - sensor.disk_free_
+      - sensor.cpu_temperature
+      # - sensor.home_eta
+      - sensor.database_file_size
+
+history:
+  include:
+    domains:
+      - sensor
+      - device_tracker
+  exclude:
+    entities:
+      - sensor.processor_use
+      - sensor.memory_use_percent
+      # - sensor.disk_free_
+      - sensor.cpu_temperature
+      - sensor.database_file_size
+      # - weather.home
+
+# View all events in a logbook
+logbook:
+  exclude:
+    entities:
+      # - binary_sensor.pibutton
+      # - sensor.ssl_expiry
+      # - sensor.home_eta
+      # - sensor.sourdough_heating_status
+      # - sensor.sourdough_humidity
+      # - sensor.sourdough_temperature
+      - weather.home
+      - switch.wol_nas
+      - media_player.living_room_speaker
+      - media_player.kitchen_speaker
+      - binary_sensor.garage_door
+    domains:
+      - script
+# ditch a bunch of stuff from here
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+shell_command: !include shell_commands.yaml
+
+http:
+  # api_password: !secret http_password
+  ssl_certificate: !secret ssl_certificate 
+  ssl_key: !secret ssl_key
+  base_url: !secret base_url
+
+mqtt:
+  broker: 192.168.0.33
+
+# https://github.com/marthoc/GarHAge/
+cover:
+  - platform: mqtt
+    name: "Garage Door"
+    state_topic: "garage/door/1/status"
+    command_topic: "garage/door/1/action"
+    availability_topic: "GarHAge/availability"
+    qos: 0
+    optimistic: false
+    retain: false
+    payload_open: "OPEN"
+    payload_close: "CLOSE"
+    payload_stop: "STATE"
+    state_open: "open"
+    state_closed: "closed"
+    payload_available: "online"
+    payload_not_available: "offline"
+
+binary_sensor:
+  - platform: mqtt
+    name: "Garage Door"
+    state_topic: "garage/door/1/status"
+    payload_on: "open"
+    payload_off: "closed"
+    availability_topic: "GarHAge/availability"
+    device_class: garage_door
+    qos: 0
+
+notify:
+  - name: hangouts_notifier
+    platform: hangouts
+    default_conversations:
+      - id: UgwmmdX7KfRqY7YHval4AaABAagBqbePCQ
+
+# alert:
+#   garage_door_open_long:
+#     name: '(ALERT) Garage door is open @ {{now().strftime("%Y-%m-%d %H:%M:%S")}}'
+#     entity_id: binary_sensor.garage_door
+#     state: 'on'   # Optional, 'on' is the default value
+#     repeat: 1
+#     can_acknowledge: true  # Optional, default is true
+#     skip_first: true  # Optional, false is the default
+#     notifiers:
+#       - hangouts_notifier
+
+duckdns:
+  domain: !secret duckdns_domain
+  access_token: !secret duckdns_token
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+
+climate:
+  - platform: generic_thermostat
+    name: Living Room Temp
+    target_sensor: sensor.living_room_temperature
+    heater: switch.fans
+
+google_assistant:
+  project_id: !secret project_id
+  api_key: !secret api_key
+  exposed_domains:
+    - switch
+    - script
+    - light
+    - sensor
+    - climate
+    - media_player
+  entity_config:
+    script.shutdown_living_room:
+      name: Shutdown Living Room
+      expose: true
+    script.watch_tv:
+      name: Watch TV
+      expose: true
+
+hdmi_cec:
+  devices:
+    tv: 0.0.0.0
+    rxv: 2.0.0.0
+
+#living room power switch
+tplink:
+  discovery: false
+  switch:
+    - host: 192.168.0.37
+
+lovelace:
+  mode: yaml
+
+media_player: !include media_players.yaml
+# group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensors.yaml
+switch: !include switches.yaml
+person: !include persons.yaml
+
+device_tracker:
+  - platform: luci
+    host: 192.168.0.1
+    username: root
+    password: !secret router_password
+    new_device_defaults:
+      track_new_devices: False
+      hide_if_away: True

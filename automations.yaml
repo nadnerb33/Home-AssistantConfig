@@ -1,0 +1,41 @@
+- id: '1552841249457'
+  alias: IFTTT Automation
+  trigger:
+    - platform: event
+      event_type: ifttt_webhook_received
+      event_data:
+        action: 'call_service'
+  action:
+    - service_template: '{{ trigger.event.data.service }}'
+      data_template:
+        entity_id: '{{ trigger.event.data.entity_id }}'
+        value: '{{ trigger.event.data.value }}'
+
+- id: '1552841249458'
+  alias: Update garage door state on startup
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "garage/door/1/action"
+        payload: "STATE"
+
+- alias: Send Message - Garage
+  trigger:
+    platform: time_pattern 
+    minutes: '/1'
+  condition:
+    - condition: state
+      entity_id: 'cover.garage_door'
+      state: 'open'
+      for:
+        minutes: 5
+  action:
+    - service: script.broadcast_via_googlehome
+      data_template:
+        what: 'The garage door has been open for {{((as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed))/60) | round(0, "floor") }} minutes'
+    - service: notify.hangouts_notifier
+      data:
+        message: 'Garage door opened {{((as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed))/60) | round(0, "floor") }} mins ago @ {{ states.binary_sensor.garage_door.last_changed.strftime("%Y-%m-%d %H:%M:%S")}}'

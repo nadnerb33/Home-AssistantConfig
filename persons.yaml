@@ -1,0 +1,12 @@
+
+- name: nadnerb
+  id: nadnerb123
+  user_id: 7a862c1588d8480987f93bed2d26069a
+  device_trackers:
+    - device_tracker.brendan_nokia
+
+- name: Lauren
+  id: lauren123
+  user_id: cfd421cbdf404c699815139bacd088a5
+  device_trackers:
+    - device_tracker.lauren_oneplus

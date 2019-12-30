@@ -1,0 +1,187 @@
+#---------- NEST ----------------
+# climate.dining_room:
+#   friendly_name: Nest
+#   icon: mdi:nest-thermostat
+# binary_sensor.dining_room_thermostat_is_locked:
+#   hidden: true
+# binary_sensor.dining_room_thermostat_fan:
+#   hidden: true
+# binary_sensor.dining_room_thermostat_has_leaf:
+#   hidden: true
+# binary_sensor.dining_room_thermostat_is_using_emergency_heat:
+#   hidden: true
+# sensor.dining_room_thermostat_humidity:
+#   friendly_name: Humidity
+#   icon: mdi:water-percent
+# sensor.dining_room_thermostat_temperature:
+#   friendly_name: Inside Temp
+# sensor.dining_room_thermostat_target:
+#   friendly_name: Target Temp
+# sensor.dining_room_thermostat_operation_mode:
+#   friendly_name: Nest Mode
+# binary_sensor.dining_room_thermostat_online:
+#   friendly_name: Nest Status
+#   hidden: true
+# sensor.dining_room_thermostat_hvac_state:
+#   friendly_name: Heating Status
+
+
+# #---------- MEDIA PLAYERS ----------------
+
+# media_player.tv:
+#   icon: mdi:television
+# media_player.yamaha_rxv481d:
+#   icon: mdi:speaker
+# media_player.kodi:
+#   icon: mdi:kodi
+# media_player.playstation_4:
+#   icon: mdi:playstation
+
+
+# #---------- SWITCHES ----------------
+# switch.wol_nas:
+#   friendly_name: NAS
+#   icon: mdi:harddisk
+
+# switch.tv:
+#   friendly_name: TV
+#   icon: mdi:television
+
+# switch.rxv481d:
+#   friendly_name: Yamaha RXV481D
+#   icon: mdi:speaker
+
+# switch.sky:
+#   assumed_state: true
+#   friendly_name: Sky HD
+#   icon: mdi:television-classic
+
+# switch.ps4:
+#   friendly_name: Playstation 4
+#   icon: mdi:gamepad-variant
+
+# switch.led:
+#   friendly_name: LED
+#   icon: mdi:led-on
+
+# switch.fans:
+#   friendly_name: TV Unit Fans
+#   icon: mdi:fan
+
+# switch.hyperionservice:
+#   friendly_name: hyperiond
+#   icon: mdi:lightbulb
+
+# switch.kodiservice:
+#   friendly_name: Kodi
+#   icon: mdi:kodi
+
+# switch.living_room_power:
+#   friendly_name: Living Room Power
+#   icon: mdi:power-socket-uk
+
+# switch.freesat:
+#   friendly_name: Freesat
+#   icon: mdi:television
+
+# #this is the RX-V481D, not sure where it comes from
+# switch.hdmi_5:
+#   hidden: true
+  
+# switch.hdmi_3:
+#   hidden: true
+# switch.hdmi_e:
+#   hidden: true
+# switch.hdmi_b:
+#   hidden: true
+# switch.hdmi_0:
+#   hidden: true
+
+
+#---------- SCRIPTS ----------------
+script.play_ps4:
+  can_cancel: false
+script.watch_sky:
+  can_cancel: false
+script.watch_tv:
+  icon: mdi:television
+
+# #---------- PS4 stuff ----------------
+# input_text.dummy_tiles:
+#   custom_ui_state_card: state-card-tiles
+#   config:
+#     columns: 3
+#     column_width: 128px
+#     row_height: 128px
+#     entities:
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/hzd.jpg
+#       column: 1
+#       row: 1
+#       data:
+#         game: Horizon Zero Dawn
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/limbo.png
+#       column: 2
+#       row: 1
+#       data:
+#         game: LIMBO
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/Fortnite.jpg
+#       column: 3
+#       row: 1
+#       data:
+#         game: Fortnite
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/gtsport.jpg
+#       column: 1
+#       row: 2
+#       data:
+#         game: GT Sport
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/inside.jpg
+#       column: 2
+#       row: 2
+#       data:
+#         game: Inside
+#     - entity: script.play_ps4_game
+#       image: /local/ps4/youtube.jpg
+#       column: 3
+#       row: 2
+#       data:
+#         game: YouTube
+
+# #---------- SENSORS ----------------
+# sensor.tv_unit_humidity:
+#   friendly_name: TV Unit Humidity
+# sensor.tv_unit_temperature:
+#   friendly_name: TV Unit Temp
+# sensor.home_eta:
+#   hidden: true
+
+#---------- PERSONS ----------------
+person.nadnerb:
+  entity_picture: !secret brendan_image
+person.lauren:
+  entity_picture: !secret lauren_image
+
+
+#---------- SOURDOUGH ----------------
+# sensor.sourdough_heating_status:
+#   icon: mdi:fire
+# sensor.sourdough_humidity:
+#   icon: mdi:water-percent
+# sensor.sourdough_temperature:
+#   icon: mdi:thermometer
+
+#---------- LIGHTS ----------------
+# light.tradfri_driver:
+#   friendly_name: Kitchen Units
+# light.lamp:
+#   friendly_name: Living Room Lamp
+#   icon: mdi:lightbulb
+
+
+# switch.tradfri_outlet:
+#   friendly_name: Tradfri
+#   icon: mdi:power-socket-uk

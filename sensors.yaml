@@ -1,0 +1,56 @@
+
+# #system monitor
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    # - type: memory_free
+    # - type: swap_use_percent
+    - type: processor_use
+   
+- platform: command_line
+  name: CPU Temperature
+  command: "cat /sys/class/thermal/thermal_zone0/temp"
+  unit_of_measurement: "°C"
+  value_template: '{{ value | multiply(0.001) | round(1) }}'
+ 
+- platform: command_line
+  name: Database File Size
+  command: "du -m /config/home-assistant_v2.db | cut -f1"
+  unit_of_measurement: 'MB'
+  value_template: '{{ value | int - 1 }}'
+
+- platform: uptime
+
+- platform: dht
+  name: Living Room
+  sensor: DHT11
+  pin: 4
+  monitored_conditions:
+    - temperature
+    - humidity
+  scan_interval: 60
+
+# - platform: rest
+#   name: Sourdough Temperature
+#   unit_of_measurement: "°C"
+#   resource: http://192.168.0.78/getTemp
+#   scan_interval: 300
+
+# - platform: rest
+#   name: Sourdough Humidity
+#   unit_of_measurement: "%"
+#   resource: http://192.168.0.78/getHumidity
+#   scan_interval: 300
+
+# - platform: rest
+#   name: Sourdough Heating Status
+#   resource: http://192.168.0.78/getHeatStatus
+#   scan_interval: 300
+
+#https://home-assistant.io/components/sensor.cert_expiry/
+# - platform: cert_expiry
+#   host: !secret ssl_host
+#   port: 8123
+#   name: SSL Expiry1

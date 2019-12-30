@@ -1,0 +1,88 @@
+- platform: wake_on_lan
+  mac_address: "cc:5d:4e:ca:18:d2"
+  name: "WOL_NAS"
+  host: "192.168.0.10"
+
+- platform: command_line
+  switches:
+    # hyperionservice:
+    #   command_on: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh start hyperion'
+    #   command_off: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh stop hyperion'
+    #   command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh status hyperion' #will return 0 if on and 1 if off
+    kodiservice:
+      command_on: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh start mediacenter'
+      command_off: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh stop mediacenter'
+      command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/control_service.sh status mediacenter' #will return 0 if on and 1 if off
+    # esp2688:
+    #   command_on: /usr/bin/curl -X GET http://192.168.0.66
+    #   command_off: /usr/bin/curl -X GET http://192.168.0.66/flash
+    #   command_state: echo 0
+    freesat:
+      command_on: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_NUMERIC_0' #could use KEY_POWER, but this will turn off the box if its aready on. 0 will turn on, but not off
+      command_off: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_POWER' 
+      #command_off: echo "standby 3" | cec-client -s 
+      #network tends to stay up for a while so cant rely on ping
+      #command_state: ping -c 5 192.168.0.32 &> /dev/null && echo 1 || echo 0
+      #command_state: ssh osmc@192.168.0.33 'sudo /home/osmc/homeassistant/freesat_status.sh' #will return 0 if on and 1 if off
+    #tv_rpi:
+    #  command_on: ssh osmc@192.168.0.33 "echo 'on 0' | /usr/osmc/bin/cec-client -s"
+    #  command_off: ssh osmc@192.168.0.33 "echo 'standby 0' | /usr/osmc/bin/cec-client -s"
+      # command_state: ssh osmc@192.168.0.33 "echo 'pow 0' | /usr/osmc/bin/cec-client -s |grep 'power status:'"
+      # value_template: '{{ value == "power status: on" }}'
+    #  value_template: "{{ is_state('media_player.tv', 'on') }}"
+
+- platform: template
+  switches:
+    rxv481d:
+      #update to include 'idle' state
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') or is_state('media_player.yamaha_rxv481d', 'idle') or is_state('media_player.yamaha_rxv481d', 'playing') }}"
+      turn_on:
+        service: media_player.turn_on
+        data:
+          entity_id: media_player.yamaha_rxv481d
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.yamaha_rxv481d
+    tv: #living room tv 
+      value_template: "{{ is_state('media_player.tv', 'on') }}"
+      turn_on:
+        service: hdmi_cec.power_on
+        data:
+          device: 0.0.0.0
+      turn_off:
+        service: media_player.turn_off
+        data:
+          entity_id: media_player.tv
+
+
+    # pi_usb:
+    #   value_template: "{{ is_state('media_player.living_room_tv', 'off') }}"
+    #   turn_on:
+    #     service: shell_command.turn_on_pi_usb
+    #   turn_off:
+    #     service: shell_command.turn_off_pi_usb
+    # ps4:
+    #   value_template: "{{ (not is_state('media_player.playstation_4', 'off')) }}"
+    #   turn_on:
+    #     service: shell_command.switch_on_ps4
+    #     # service: media_player.turn_on
+    #     # data:
+    #     #   entity_id: media_player.playstation_4
+    #   turn_off:
+    #     service: shell_command.switch_off_ps4
+    #     # service: media_player.turn_off
+    #     # data:
+    #     #   entity_id: media_player.playstation_4
+
+# - platform: switch
+#     turn_everything_off:
+#       value_template: "false"
+#       turn_on:
+#         service: script.turn_everything_off
+#       turn_off: 
+
+- platform: rpi_gpio
+  ports:
+    # 21: led #number on picase
+    26: Fans #tv unit
