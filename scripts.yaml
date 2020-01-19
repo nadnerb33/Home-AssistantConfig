@@ -22,7 +22,7 @@ watch_tv_x:
   sequence:
   - service: script.turn_on
     entity_id: script.watch_tv
-  - delay: 00:00:15
+  - delay: 00:00:50
   - service: script.freesat_channel_x
     data_template:
       value: >
@@ -139,7 +139,6 @@ ps4_start_x:
         {% elif (value.lower() == "red dead 2")%}  CUSA08519
         {% elif (value == "Red Dead Redemption 2") %}  CUSA08519
         {% elif (value == "Overcooked") %}  CUSA05399
-        {% elif (value == "Untitled Goose Game") %}  CUSA23081
         {% else %}  {{value}}
         {% endif %}
   - service: media_player.turn_on
@@ -178,8 +177,9 @@ yamaha_source_x:
     # we need to account for variations in Google's spelling of the spoken phrases
     data_template:
       source: >
-        {% if   (value == "PS 4")          %} PS4
-        {% elif (value == "Playstation 4") %} PS4
+        {% if   (value == "PS 4")          %} HDMI4
+        {% elif (value == "Playstation 4") %} HDMI4
+        {% elif (value == "Chromecast")    %} HDMI1
         {% elif (value == "HDMI 1")        %} HDMI1
         {% elif (value == "HDMI 2")        %} HDMI2
         {% elif (value == "HDMI 3")        %} HDMI3

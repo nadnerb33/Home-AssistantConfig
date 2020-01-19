@@ -35,7 +35,7 @@
   action:
     - service: script.broadcast_via_googlehome
       data_template:
-        what: 'The garage door has been open for {{((as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed))/60) | round(0, "floor") }} minutes'
+        what: 'The garage door has been open for {{((as_timestamp(now()) - as_timestamp(states.cover.garage_door.last_changed))/60) | round(0, "floor") }} minutes'
     - service: notify.hangouts_notifier
       data:
-        message: 'Garage door opened {{((as_timestamp(now()) - as_timestamp(states.binary_sensor.garage_door.last_changed))/60) | round(0, "floor") }} mins ago @ {{ states.binary_sensor.garage_door.last_changed.strftime("%Y-%m-%d %H:%M:%S")}}'
+        message: 'Garage door opened {{((as_timestamp(now()) - as_timestamp(states.cover.garage_door.last_changed))/60) | round(0, "floor") }} mins ago @ {{ states.cover.garage_door.last_changed.strftime("%Y-%m-%d %H:%M:%S")}}'

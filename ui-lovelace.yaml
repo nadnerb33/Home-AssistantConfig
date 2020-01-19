@@ -5,16 +5,15 @@
 #   add timer from when TV is turned on for 1 min, then only run 
 #   the RXV scripts if TV was recently switcjed on
 
-title: Home
 views:
 ######## Home ########
   - title: Home
     icon: 'mdi:home'
     path: home
-    badges:
-      - sensor.living_room_humidity
-      - sensor.living_room_temperature
-      # - sensor.ssl_expiry
+    # badges:
+    #   - sensor.living_room_humidity
+    #   - sensor.living_room_temperature
+    #   # - sensor.ssl_expiry
     cards:
       - entities:
           - person.nadnerb
@@ -31,19 +30,32 @@ views:
         entities:
           - entity: light.living_room_lamp
           - entity: light.living_room_lamp_2
-          - entity: switch.tradfri_outlet
+          # - entity: switch.tradfri_outlet // xmas lights
       - entity: media_player.tv
         type: media-control
 # could add a source of RXV to a card like this
 # https://community.home-assistant.io/t/lovelace-picture-glance-state-image-broken/61820/2
       - entity: media_player.yamaha_rxv481d
         type: media-control
+      - type: picture-glance
+        entities:
+          - switch.rxv481d_power
+          - switch.yamaha_source_freesat
+          - switch.yamaha_source_chromecast
+          - switch.yamaha_source_ps4
+          - switch.yamaha_source_kodi
+          - switch.yamaha_source_spotify
+          - switch.yamaha_source_vinyl
+        image: /local/yamaha.jpg
+        state_filter:
+          "off": opacity(0.5)
+        entity: media_player.yamaha_rxv481d
       - entity: media_player.kodi
         type: media-control
       - entity: media_player.playstation_4
         type: media-control
-      # - entity: media_player.chromecast_dining_room
-      #   type: media-control
+      - entity: media_player.chromecast_living_room
+        type: media-control
       - entity: media_player.kitchen_speaker
         type: media-control
       - entity: media_player.living_room_speaker
@@ -53,14 +65,27 @@ views:
         show_header_toggle: false
         entities:
           # - entity: switch.ps4
-          - entity: switch.rxv481d
+          - entity: switch.rxv481d_power
           - entity: switch.tv
           - entity: switch.freesat
           - entity: switch.kodiservice
           - entity: switch.wol_nas
           - entity: switch.living_room_power
           - entity: switch.tradfri_outlet
-
+      - type: history-graph
+        title: 'Temperature'
+        entities:
+          - entity: sensor.living_room_temperature
+            name: Lounge
+          - entity: sensor.garage_temperature
+            name: Garage
+      - type: history-graph
+        title: 'Humidity'
+        entities:
+          - entity: sensor.living_room_humidity
+            name: Lounge
+          - entity: sensor.garage_humidity
+            name: Garage
 
 ######## Living Room ########
   - title: Living Room
@@ -138,7 +163,9 @@ views:
       #     name: Sourdough Starter
       #     entity:  binary_sensor.sourdough_status
       #     image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
-
+      - type: sensor
+        entity: sensor.wastecollection
+        name: Waste Collection
 ######## Automations & Scripts ########
   - title: Automations & Scripts
     icon: 'mdi:auto-fix'
@@ -234,16 +261,18 @@ views:
       - type: picture-glance
         title: Garage
         entities:
-          - binary_sensor.garage_door
           - cover.garage_door
         state_image:
-          "on": "https://nadnerb.duckdns.org:8123/local/garage_open.jpg"
-          "off": /local/garage_closed.jpg
-        entity: binary_sensor.garage_door
-      # - entities:
-      #     - binary_sensor.garage_door
-      #   show_name: false
-      #   show_state: true
-      #   theme: Backend-selected
-      #   title: Garage
-      #   type: glance
+          "open": /local/garage_open.jpg
+          "closed": /local/garage_closed.jpg
+        entity: cover.garage_door
+      - type: history-graph
+        entities:
+          - entity: cover.garage_door
+            name: Status
+      - type: entities
+        entities:
+          - entity: sensor.garage_temperature
+            name: Temperature
+          - entity: sensor.garage_humidity
+            name: Humidity

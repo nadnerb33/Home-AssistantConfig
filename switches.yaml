@@ -33,7 +33,7 @@
 
 - platform: template
   switches:
-    rxv481d:
+    rxv481d_power:
       #update to include 'idle' state
       value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') or is_state('media_player.yamaha_rxv481d', 'idle') or is_state('media_player.yamaha_rxv481d', 'playing') }}"
       turn_on:
@@ -54,8 +54,84 @@
         service: media_player.turn_off
         data:
           entity_id: media_player.tv
-
-
+    yamaha_source_chromecast:
+      friendly_name: Chromecast
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') and is_state_attr('media_player.yamaha_rxv481d', 'source', 'Chromecast') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI1
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI1
+    yamaha_source_freesat:
+      friendly_name: Freesat
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') and is_state_attr('media_player.yamaha_rxv481d', 'source', 'Freesat') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI2
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI2
+    yamaha_source_spotify:
+      friendly_name: Spotify
+      value_template: "{{ is_state_attr('media_player.yamaha_rxv481d', 'source', 'Spotify') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: Spotify
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: Spotify
+    yamaha_source_kodi:
+      friendly_name: Kodi
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') and is_state_attr('media_player.yamaha_rxv481d', 'source', 'Kodi') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI3
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI3
+    yamaha_source_ps4:
+      friendly_name: PS4
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') and is_state_attr('media_player.yamaha_rxv481d', 'source', 'PS4') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI4
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: HDMI4
+    yamaha_source_vinyl:
+      friendly_name: Vinyl
+      value_template: "{{ is_state('media_player.yamaha_rxv481d', 'on') and is_state_attr('media_player.yamaha_rxv481d', 'source', 'Vinyl') }}"
+      turn_on:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: AV3
+      turn_off:
+        service: media_player.select_source
+        data:
+          entity_id: media_player.yamaha_rxv481d
+          source: AV3
     # pi_usb:
     #   value_template: "{{ is_state('media_player.living_room_tv', 'off') }}"
     #   turn_on:

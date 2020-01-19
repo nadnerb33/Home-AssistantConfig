@@ -18,7 +18,6 @@
     - "AV4"
     - "AirPlay"
     - "Bluetooth"
-    - "HDMI1"
     - "JUKE"
     - "MusicCast Link"
     - "NET RADIO"
@@ -27,6 +26,7 @@
     - "TUNER"
     - "USB"
   source_names:
+    HDMI1: "Chromecast"
     HDMI2: "Freesat"
     HDMI3: "Kodi"
     HDMI4: "PS4"

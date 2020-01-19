@@ -30,8 +30,8 @@
 
 # media_player.tv:
 #   icon: mdi:television
-media_player.yamaha_rxv481d:
-  icon: mdi:audio-video
+# media_player.yamaha_rxv481d:
+#   icon: mdi:speaker
 # media_player.kodi:
 #   icon: mdi:kodi
 # media_player.playstation_4:
@@ -47,27 +47,10 @@ media_player.yamaha_rxv481d:
 #   friendly_name: TV
 #   icon: mdi:television
 
-switch.rxv481d_power:
-  friendly_name: Yamaha RXV481D
-  icon: mdi:power
+# switch.rxv481d:
+#   friendly_name: Yamaha RXV481D
+#   icon: mdi:speaker
 
-switch.yamaha_source_chromecast:
-   icon: mdi:google-chrome
-
-switch.yamaha_source_freesat:
-   icon: mdi:television
-
-switch.yamaha_source_spotify:
-   icon: mdi:spotify
-
-switch.yamaha_source_kodi:
-   icon: mdi:kodi
-
-switch.yamaha_source_ps4:
-   icon: mdi:playstation
-
-switch.yamaha_source_vinyl:
-   icon: mdi:record-player
 # switch.sky:
 #   assumed_state: true
 #   friendly_name: Sky HD
@@ -175,8 +158,6 @@ script.watch_tv:
 #   friendly_name: TV Unit Temp
 # sensor.home_eta:
 #   hidden: true
-sensor.wastecollection:
-  icon: mdi:delete
 
 #---------- PERSONS ----------------
 person.nadnerb:
@@ -206,5 +187,4 @@ person.lauren:
 #   icon: mdi:power-socket-uk
 
 cover.garage_door:
-  # icon: mdi:garage
-  device_class: garage
+  icon: mdi:garage
