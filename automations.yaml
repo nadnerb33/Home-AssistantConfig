@@ -12,7 +12,7 @@
         value: '{{ trigger.event.data.value }}'
 
 - id: '1552841249458'
-  alias: Update garage door state on startup
+  alias: Update mqtt states on startup
   trigger:
     - platform: homeassistant
       event: start
@@ -20,6 +20,10 @@
     - service: mqtt.publish
       data:
         topic: "garage/door/1/action"
+        payload: "STATE"
+    - service: mqtt.publish
+      data:
+        topic: "garage/dht/action"
         payload: "STATE"
 
 - alias: Send Message - Garage

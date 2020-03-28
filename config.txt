@@ -1,0 +1,19 @@
+hdmi_edid_file=1  
+gpu_mem_1024=256  
+disable_overscan=1
+start_x=1  
+disable_splash=1
+dtparam=spi=on
+hdmi_ignore_cec_init=1  
+gpu_mem_256=112  
+sdtv_aspect=1  
+gpu_mem_512=144  
+hdmi_force_hotplug=1  
+hdmi_drive=2
+hdmi_group=1  
+hdmi_mode=16  
+#framebuffer_width=1920 #set the resolution of the TV
+#framebuffer_height=1080 #set the resolution of the TV
+#dtoverlay=gpio-ir,gpio_pin=27
+
+dtoverlay=gpio-ir-tx,gpio_pin=17

@@ -5,8 +5,8 @@ homeassistant:
 default_config:
 
 recorder:
-  purge_keep_days: 2
-  purge_interval: 2
+  purge_keep_days: 3
+  purge_interval: 3
   exclude:
     entities:
       - sensor.processor_use
@@ -15,6 +15,9 @@ recorder:
       - sensor.cpu_temperature
       # - sensor.home_eta
       - sensor.database_file_size
+      - sensor.wastecollection
+      - sensor.ssl_expiry
+      - sensor.uptime
 
 history:
   include:

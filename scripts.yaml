@@ -13,6 +13,7 @@ watch_kodi:
     data:
       entity_id: light.hyperion
       effect: HDMI
+  - delay: 00:00:10
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
@@ -45,7 +46,7 @@ watch_tv:
   - data:
       source: Freesat
     service: script.wake_rxv481d
-  - delay: 00:00:05
+  - delay: 00:00:10
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
@@ -66,6 +67,7 @@ play_ps4:
   - data:
       source: PS4
     service: script.wake_rxv481d
+  - delay: 00:00:10
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
@@ -106,12 +108,12 @@ start_living_room:
   sequence:
   - service: light.turn_on
     entity_id: light.living_room_lamp
-  - service: light.turn_on
-    entity_id: light.living_room_lamp_2
+  # - service: light.turn_on
+  #   entity_id: light.living_room_lamp_2
   - service: switch.turn_on
     entity_id: switch.living_room_power
-  - service: switch.turn_on
-    entity_id: switch.tradfri_outlet
+  # - service: switch.turn_on
+  #   entity_id: switch.tradfri_outlet
   # - service: light.turn_on
   #   data:
   #     entity_id: light.hyperion
@@ -147,6 +149,7 @@ ps4_start_x:
     entity_id: media_player.yamaha_rxv481d
     data_template:
       source: 'PS4'
+  - delay: 00:00:10
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
@@ -241,6 +244,12 @@ shutdown_living_room:
       entity_id: media_player.living_room_speaker
       media_content_id: https://nadnerb.duckdns.org:8123/local/shutdown.mp3
       media_content_type: audio/mp4
+  - service: hdmi_cec.standby
+    data:
+      device: 0.0.0.0 #tv?
+  - service: hdmi_cec.standby
+    data:
+      device: 2.2.0.0 #freesat?
   # - service: light.turn_on
   #   data:
   #     entity_id: light.hyperion
@@ -263,10 +272,10 @@ shutdown_living_room:
   - delay: 00:00:10
   - service: light.turn_off
     entity_id: light.living_room_lamp
-  - service: light.turn_off
-    entity_id: light.living_room_lamp_2
-  - service: switch.turn_off
-    entity_id: switch.tradfri_outlet
+  # - service: light.turn_off
+  #   entity_id: light.living_room_lamp_2
+  # - service: switch.turn_off
+  #   entity_id: switch.tradfri_outlet
 
 # wtf is going on here? Well, these scripts fix some issues with the AVR.
 # firstly, the AVR is only accesible to HA if it was on(or in standby) when HA first booted.
@@ -290,9 +299,6 @@ wake_rxv481d:
     entity_id: media_player.yamaha_rxv481d
     data_template:
       source: '{{source}}'
-  - service: switch.turn_on
-    data:
-      entity_id: switch.led
   - wait_template: "{{ source != state_attr('media_player.yamaha_rxv481d' , 'source') }}" 
     timeout: 00:00:30
   #set source again
@@ -307,9 +313,6 @@ wake_rxv481d:
     entity_id: media_player.yamaha_rxv481d
     data_template:
       source: '{{source}}'    
-  - service: switch.turn_off
-    data:
-      entity_id: switch.led
 
 #No2. this is called by script no1.
 # if the avr is on, then it will set the source and stop

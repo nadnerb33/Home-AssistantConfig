@@ -20,6 +20,9 @@
     freesat:
       command_on: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_NUMERIC_0' #could use KEY_POWER, but this will turn off the box if its aready on. 0 will turn on, but not off
       command_off: ssh osmc@192.168.0.33 'irsend -d /var/run/lirc/lircd-lirc0 SEND_ONCE freesat KEY_POWER' 
+      # command_on:  curl 'http://irblaster.local:80/msg?code=800FF:NEC:32&pass=irblaster'
+      # command_off: curl 'http://irblaster.local:80/msg?code=830CF:NEC:32&pass=irblaster'
+
       #command_off: echo "standby 3" | cec-client -s 
       #network tends to stay up for a while so cant rely on ping
       #command_state: ping -c 5 192.168.0.32 &> /dev/null && echo 1 || echo 0

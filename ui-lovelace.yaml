@@ -8,6 +8,7 @@
 views:
 ######## Home ########
   - title: Home
+    show_header_toggle: false
     icon: 'mdi:home'
     path: home
     # badges:
@@ -35,8 +36,6 @@ views:
         type: media-control
 # could add a source of RXV to a card like this
 # https://community.home-assistant.io/t/lovelace-picture-glance-state-image-broken/61820/2
-      - entity: media_player.yamaha_rxv481d
-        type: media-control
       - type: picture-glance
         entities:
           - switch.rxv481d_power
@@ -196,6 +195,7 @@ views:
         title: Automations
         show_header_toggle: false
         entities:
+          - automation.send_message_garage
           - automation.switch_off_fans_when_tv_unit_is_cool
           - automation.notification_audio__welcome_home_person
           - automation.switch_on_fans_when_tv_unit_is_hot
