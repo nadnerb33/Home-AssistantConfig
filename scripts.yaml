@@ -6,6 +6,9 @@ watch_kodi:
     entity_id: script.start_living_room
   - service: switch.turn_on
     entity_id: switch.living_room_power
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.chromecast_living_room
   - data:
       source: Kodi
     service: script.wake_rxv481d
@@ -17,6 +20,7 @@ watch_kodi:
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
+
 
 watch_tv_x:
   alias: Watch TV x
@@ -38,6 +42,9 @@ watch_tv:
     entity_id: script.start_living_room
   - service: switch.turn_on
     entity_id: switch.living_room_power
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.chromecast_living_room
   # - service: light.turn_on
   #   data:
   #     entity_id: light.hyperion
@@ -51,7 +58,6 @@ watch_tv:
     data:
       device: 0.0.0.0
 
-
 play_ps4:
   alias: Play PS4
   sequence:
@@ -60,6 +66,9 @@ play_ps4:
   - service: switch.turn_on
     entity_id: switch.living_room_power
   # - service: shell_command.switch_on_ps4 #add condition so this only runs if PS4 is off
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.chromecast_living_room
   - service: ps4.send_command
     data:
       entity_id: media_player.playstation_4
@@ -124,6 +133,9 @@ ps4_start_x:
   sequence:
   - service: script.turn_on
     entity_id: script.start_living_room
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.chromecast_living_room
   - service: media_player.select_source
     entity_id: media_player.playstation_4
     data_template:
@@ -153,6 +165,8 @@ ps4_start_x:
   - service: hdmi_cec.power_on
     data:
       device: 0.0.0.0
+
+
 
 yamaha_volume_x:
   alias: Change Yamaha Volume
@@ -247,6 +261,9 @@ shutdown_living_room:
   - service: hdmi_cec.standby
     data:
       device: 0.0.0.0 #tv?
+  - service: media_player.turn_off
+    data:
+      entity_id: media_player.tv
   - service: hdmi_cec.standby
     data:
       device: 2.2.0.0 #freesat?

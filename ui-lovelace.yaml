@@ -162,9 +162,26 @@ views:
       #     name: Sourdough Starter
       #     entity:  binary_sensor.sourdough_status
       #     image: "https://cdn.shopify.com/s/files/1/1165/4656/products/31089005211_0726891592_k_2000x.jpg?v=1521709882"
+######## Waste Collection ########
+  - title: Waste Collection
+    icon: 'mdi:trash-can-outline'
+    path: wastecollection
+    theme: Backend-selected
+    badges: []
+    cards:
       - type: sensor
-        entity: sensor.wastecollection
-        name: Waste Collection
+        entity: sensor.next_recycling_collection
+        name: Recycling
+      - type: sensor
+        entity: sensor.next_garden_collection
+        name: Garden Waste
+      - type: sensor
+        entity: sensor.next_rubbish_collection
+        name: Rubbish
+      - type: iframe
+        url: 'https://www.bathnes.gov.uk/WebForms/waste/attachments/BD12385 Collection TUE-B.pdf'
+        aspect_ratio: 70%
+        # static URL above, can get it from sensor.wastecollection_pdf if it changes - cant curerntly load this dynamically
 ######## Automations & Scripts ########
   - title: Automations & Scripts
     icon: 'mdi:auto-fix'

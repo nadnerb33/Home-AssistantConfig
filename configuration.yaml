@@ -100,10 +100,14 @@ cover:
 #     payload_not_available: "offline"
 
 notify:
-  - name: hangouts_notifier
+  - name: hangouts_notifier_test # brendan only
     platform: hangouts
     default_conversations:
       - id: UgwmmdX7KfRqY7YHval4AaABAagBqbePCQ
+  - name: hangouts_notifier # brendan_lauren
+    platform: hangouts
+    default_conversations:
+      - id: UgxKkktLYfRh9yZk9JJ4AaABAQ
 
 # alert:
 #   garage_door_open_long:

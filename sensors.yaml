@@ -32,10 +32,37 @@
     - humidity
   scan_interval: 300
 
-- platform: command_line
+# - platform: command_line
+#   name: wastecollection
+#   command: "python3 /config/python_scripts/wastecollection.py"
+#   scan_interval: 21600 # 6hrs
+
+- platform: rest
+  resource: !secret waste_collection_url
   name: wastecollection
-  command: "python3 /config/python_scripts/wastecollection.py"
+  value_template: '{{ value_json }}'
   scan_interval: 21600 # 6hrs
+
+
+- platform: rest
+  name: wastecollection
+  resource: !secret waste_collection_url
+  json_attributes:
+    - recyclingNextDate
+    - organicNextDate
+    - residualNextDate
+    - AttachmentURL
+  value_template: 'OK'
+- platform: template
+  sensors:
+    next_recycling_collection:
+      value_template: '{{ states.sensor.wastecollection.attributes["recyclingNextDate"] }}'
+    next_rubbish_collection:
+      value_template: '{{ states.sensor.wastecollection.attributes["residualNextDate"] }}'
+    next_garden_collection:
+      value_template: '{{ states.sensor.wastecollection.attributes["organicNextDate"] }}'
+    wastecollection_pdf:
+      value_template: '{{ states.sensor.wastecollection.attributes["AttachmentURL"] }}'
 
 - platform: mqtt
   name: "Garage Temperature"

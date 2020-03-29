@@ -50,9 +50,12 @@
     tv: #living room tv 
       value_template: "{{ is_state('media_player.tv', 'on') }}"
       turn_on:
-        service: hdmi_cec.power_on
+        service: media_player.turn_on
         data:
-          device: 0.0.0.0
+          entity_id: media_player.chromecast_living_room
+        # service: hdmi_cec.power_on
+        # data:
+        #   device: 0.0.0.0
       turn_off:
         service: media_player.turn_off
         data:

@@ -43,3 +43,49 @@
     - service: notify.hangouts_notifier
       data:
         message: 'Garage door opened {{((as_timestamp(now()) - as_timestamp(states.cover.garage_door.last_changed))/60) | round(0, "floor") }} mins ago @ {{ states.cover.garage_door.last_changed.strftime("%Y-%m-%d %H:%M:%S")}}'
+
+- alias: Waste Collection Reminder
+  id: wastecollectionreminder
+  trigger:
+    platform: time
+    at: '18:30'
+    # platform: time_pattern 
+    # minutes: '/1'
+  condition:
+    condition: template
+    value_template: >
+      {{ 
+        as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') 
+        or
+        as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
+        or
+        as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
+      }}
+  action:
+    - service: script.broadcast_via_googlehome
+      data_template:
+        what: 
+          Put out
+          {%- if as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            recycling
+          {%- endif %}
+          {%- if as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            and garden waste
+          {%- endif %}
+          {%- if as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            and rubbish
+          {%- endif %}
+          tonight
+    - service: notify.hangouts_notifier
+      data:
+        message:
+          Put out
+          {%- if as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            {{ ' recycling' }}
+          {%- endif %}
+          {%- if as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            {{' and garden waste' }}
+          {%- endif %}
+          {%- if as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+            {{ ' and rubbish' }}
+          {%- endif %}{{ ' tonight.' }}
