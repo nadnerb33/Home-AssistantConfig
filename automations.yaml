@@ -55,24 +55,24 @@
     condition: template
     value_template: >
       {{ 
-        as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') 
+        (as_timestamp(states('sensor.next_recycling_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') 
         or
-        as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
+        (as_timestamp(states('sensor.next_garden_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
         or
-        as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
+        (as_timestamp(states('sensor.next_rubbish_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d')
       }}
   action:
     - service: script.broadcast_via_googlehome
       data_template:
         what: 
           Put out
-          {%- if as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_recycling_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             recycling
           {%- endif %}
-          {%- if as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_garden_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             and garden waste
           {%- endif %}
-          {%- if as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_rubbish_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             and rubbish
           {%- endif %}
           tonight
@@ -80,12 +80,20 @@
       data:
         message:
           Put out
-          {%- if as_timestamp(states('sensor.next_recycling_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_recycling_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             {{ ' recycling' }}
           {%- endif %}
-          {%- if as_timestamp(states('sensor.next_garden_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_garden_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             {{' and garden waste' }}
           {%- endif %}
-          {%- if as_timestamp(states('sensor.next_rubbish_collection')) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
+          {%- if (as_timestamp(states('sensor.next_rubbish_collection'))- 86400) | timestamp_custom("%Y-%m-%d") == now().strftime('%Y-%m-%d') -%}
             {{ ' and rubbish' }}
           {%- endif %}{{ ' tonight.' }}
+
+- alias: Restart Raspberry Pi 3am
+  id: restartpi3am
+  trigger:
+    platform: time
+    at: '03:00'
+  action:
+    - service: shell_command.restart_pi

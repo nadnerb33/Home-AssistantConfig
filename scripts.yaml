@@ -115,10 +115,8 @@ start_living_room:
   #this only runs if living room power isnt on yet, it just flashes the LEDs as this is the first time it starts.
   alias: Start Living Room
   sequence:
-  - service: light.turn_on
-    entity_id: light.living_room_lamp
-  # - service: light.turn_on
-  #   entity_id: light.living_room_lamp_2
+  - service: script.turn_on
+    entity_id: script.living_room_lights
   - service: switch.turn_on
     entity_id: switch.living_room_power
   # - service: switch.turn_on
@@ -127,6 +125,16 @@ start_living_room:
   #   data:
   #     entity_id: light.hyperion
   #     effect: Rainbow swirl fast
+
+living_room_lights:
+  alias: Start Living Room
+  sequence:
+  - condition: sun
+    after: sunset
+  - service: light.turn_on
+    entity_id: light.living_room_lamp
+  # - service: light.turn_on
+  #   entity_id: light.living_room_lamp_2
 
 ps4_start_x:
   alias: PS4 Start X
@@ -390,4 +398,3 @@ broadcast_via_googlehome:
       data_template:
         entity_id: media_player.kitchen_speaker
         message: "{{ what }}"
-

@@ -140,7 +140,6 @@ google_assistant:
   project_id: !secret project_id
   api_key: !secret api_key
   exposed_domains:
-    - switch
     - script
     - light
     - sensor
@@ -152,6 +151,10 @@ google_assistant:
       expose: true
     script.watch_tv:
       name: Watch TV
+      expose: true
+    switch.freesat:
+      expose: true
+    switch.living_room_power:
       expose: true
 
 hdmi_cec:

@@ -3,7 +3,7 @@
   id: nadnerb123
   user_id: 7a862c1588d8480987f93bed2d26069a
   device_trackers:
-    - device_tracker.brendan_nokia
+    - device_tracker.brendan_nokia_72
 
 - name: Lauren
   id: lauren123
