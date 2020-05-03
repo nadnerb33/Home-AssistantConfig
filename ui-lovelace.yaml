@@ -76,8 +76,16 @@ views:
         entities:
           - entity: sensor.living_room_temperature
             name: Lounge
+          - entity: sensor.bedroom_temperature
+            name: Bedroom
+          - entity: sensor.conservatory_temperature
+            name: Conservatory
+          - entity: sensor.conservatory_temperature
+            name: Studio
           - entity: sensor.garage_temperature
             name: Garage
+          - entity: sensor.outside_temperature
+            name: Outisde
       - type: history-graph
         title: 'Humidity'
         entities:
@@ -85,6 +93,8 @@ views:
             name: Lounge
           - entity: sensor.garage_humidity
             name: Garage
+          - entity: sensor.outside_humidity
+            name: Outisde
 
 ######## Living Room ########
   - title: Living Room
@@ -267,7 +277,20 @@ views:
         entities:
           # - entity: switch.hyperionservice
           - entity: switch.kodiservice
-
+      - type: history-graph
+        title: 'ESP12E'
+        hours_to_show: 12
+        refresh_interval: 900
+        entities:
+          - sensor.a_v
+          - sensor.b_v
+          - sensor.c_v
+          - sensor.a_w
+          - sensor.b_w
+          - sensor.c_w
+          - sensor.a_ch
+          - sensor.b_ch
+          - sensor.c_ch
 ######## Garage ########
   - title: Garage
     icon: 'mdi:garage'

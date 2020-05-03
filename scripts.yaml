@@ -127,10 +127,18 @@ start_living_room:
   #     effect: Rainbow swirl fast
 
 living_room_lights:
-  alias: Start Living Room
+  alias: Turn on living room lights after sunset
   sequence:
   - condition: sun
     after: sunset
+  - condition: or
+    conditions:
+      - condition: sun
+        after: sunset
+        after_offset: "-00:30:00"
+      - condition: sun
+        before: sunrise      
+        before_offset: "+00:30:00"
   - service: light.turn_on
     entity_id: light.living_room_lamp
   # - service: light.turn_on

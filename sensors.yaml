@@ -37,11 +37,11 @@
 #   command: "python3 /config/python_scripts/wastecollection.py"
 #   scan_interval: 21600 # 6hrs
 
-- platform: rest
-  resource: !secret waste_collection_url
-  name: wastecollection
-  value_template: '{{ value_json }}'
-  scan_interval: 21600 # 6hrs
+# - platform: rest
+#   resource: !secret waste_collection_url
+#   name: wastecollection
+#   value_template: '{{ value_json }}'
+#   scan_interval: 21600 # 6hrs
 
 
 - platform: rest
@@ -53,6 +53,7 @@
     - residualNextDate
     - AttachmentURL
   value_template: 'OK'
+
 - platform: template
   sensors:
     next_recycling_collection:
@@ -63,12 +64,55 @@
       value_template: '{{ states.sensor.wastecollection.attributes["organicNextDate"] }}'
     wastecollection_pdf:
       value_template: '{{ states.sensor.wastecollection.attributes["AttachmentURL"] }}'
+    outside_temperature:
+      value_template: '{{float(state_attr("weather.home", "temperature")) }}'
+      unit_of_measurement: '°C'
+      device_class: "temperature"
+    outside_humidity:
+      value_template: '{{float(state_attr("weather.home", "humidity")) }}'
+      unit_of_measurement: '%'
+      device_class: "humidity"
+    bedroom_temperature:
+      value_template: '{{float(state_attr("sensor.esp_a", "t")) }}'
+      unit_of_measurement: '°C'
+      device_class: "temperature"
+    studio_temperature:
+      value_template: '{{float(state_attr("sensor.esp_b", "t")) }}'
+      unit_of_measurement: '°C'
+      device_class: "temperature"
+    conservatory_temperature:
+      value_template: '{{float(state_attr("sensor.esp_c", "t")) }}'
+      unit_of_measurement: '°C'
+      device_class: "temperature"
+    a_v:
+      value_template: '{{float(state_attr("sensor.esp_a", "v")) }}'
+      unit_of_measurement: 'v'
+    b_v:
+      value_template: '{{float(state_attr("sensor.esp_b", "v")) }}'
+      unit_of_measurement: 'v'
+    c_v:
+      value_template: '{{float(state_attr("sensor.esp_c", "v")) }}'
+      unit_of_measurement: 'v'
+    a_w:
+      value_template: '{{float(state_attr("sensor.esp_a", "w")) }}'
+      unit_of_measurement: 's'
+    b_w:
+      value_template: '{{float(state_attr("sensor.esp_b", "w")) }}'
+      unit_of_measurement: 's'
+    c_w:
+      value_template: '{{float(state_attr("sensor.esp_c", "w")) }}'
+      unit_of_measurement: 's'
+    a_ch:
+      value_template: '{{float(state_attr("sensor.esp_a", "ch")) }}'
+    b_ch:
+      value_template: '{{float(state_attr("sensor.esp_b", "ch")) }}'
+    c_ch:
+      value_template: '{{float(state_attr("sensor.esp_c", "ch")) }}'
 
 - platform: mqtt
   name: "Garage Temperature"
   state_topic: "garage/dht/status/temperature"
   unit_of_measurement: '°C'
-  #value_template: "{{ value_json.temperature }}"
   #availability_topic: "garage/dht/status/"
   device_class: "temperature"
 
@@ -76,9 +120,38 @@
   name: "Garage Humidity"
   state_topic: "garage/dht/status/humidity"
   unit_of_measurement: '%'
-  #value_template: "{{ value_json.temperature }}"
   #availability_topic: "garage/dht/status/"
   device_class: "humidity"
+
+- platform: mqtt
+  name: "ESP A"
+  state_topic: "esp/a/data"
+  availability_topic: "esp/a/status"
+  expire_after: 300
+  payload_available: "online"
+  payload_not_available: "disconnected"
+  value_template: '{{ value_json }}'
+  json_attributes_topic: "esp/a/data"
+
+- platform: mqtt
+  name: "ESP B"
+  state_topic: "esp/b/data"
+  availability_topic: "esp/b/status"
+  expire_after: 300
+  payload_available: "online"
+  payload_not_available: "disconnected"
+  value_template: '{{ value_json }}'
+  json_attributes_topic: "esp/b/data"
+
+- platform: mqtt
+  name: "ESP C"
+  state_topic: "esp/c/data"
+  availability_topic: "esp/c/status"
+  expire_after: 300
+  payload_available: "online"
+  payload_not_available: "disconnected"
+  value_template: '{{ value_json.v }}'
+  json_attributes_topic: "esp/c/data"
 
 # - platform: rest
 #   name: Sourdough Temperature

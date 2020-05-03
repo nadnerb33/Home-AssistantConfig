@@ -11,13 +11,16 @@ recorder:
     entities:
       - sensor.processor_use
       - sensor.memory_use_percent
-      # - sensor.disk_free_
+      - sensor.disk_use_percent
       - sensor.cpu_temperature
       # - sensor.home_eta
       - sensor.database_file_size
       - sensor.wastecollection
       - sensor.ssl_expiry
       - sensor.uptime
+      - sensor.esp_a
+      - sensor.esp_b
+      - sensor.esp_c
 
 history:
   include:
@@ -31,7 +34,16 @@ history:
       # - sensor.disk_free_
       - sensor.cpu_temperature
       - sensor.database_file_size
-      # - weather.home
+      - sensor.wastecollection_pdf
+      - sensor.wastecollection
+      - sensor.next_recycling_collection
+      - sensor.next_rubbish_collection
+      - sensor.next_garden_collection
+      - sensor.outside_tempertature
+      - sensor.rtc
+      - sensor.esp_a
+      - sensor.esp_b
+      - sensor.esp_c
 
 # View all events in a logbook
 logbook:
@@ -50,6 +62,12 @@ logbook:
       - binary_sensor.garage_door
       - sensor.wastecollection
       - sensor.disk_use_percent
+      - media_player.bedroom_chromecast
+      - sensor.wastecollection_pdf
+      - sensor.wastecollection
+      - sensor.next_recycling_collection
+      - sensor.next_rubbish_collection
+      - sensor.next_garden_collection
     domains:
       - script
       - person

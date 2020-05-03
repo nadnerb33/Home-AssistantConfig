@@ -164,7 +164,7 @@
 #         service: script.turn_everything_off
 #       turn_off: 
 
-- platform: rpi_gpio
-  ports:
-    # 21: led #number on picase
-    26: Fans #tv unit
+# - platform: rpi_gpio
+#   ports:
+#     # 21: led #number on picase
+#     26: Fans #tv unit
