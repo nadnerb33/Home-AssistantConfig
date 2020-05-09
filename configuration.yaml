@@ -175,10 +175,10 @@ google_assistant:
     switch.living_room_power:
       expose: true
 
-hdmi_cec:
-  devices:
-    tv: 0.0.0.0
-    rxv: 2.0.0.0
+# hdmi_cec:
+#   devices:
+#     tv: 0.0.0.0
+#     rxv: 2.0.0.0
 
 #living room power switch
 tplink:

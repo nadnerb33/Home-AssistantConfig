@@ -17,9 +17,9 @@ watch_kodi:
       entity_id: light.hyperion
       effect: HDMI
   - delay: 00:00:10
-  - service: hdmi_cec.power_on
-    data:
-      device: 0.0.0.0
+  # - service: hdmi_cec.power_on
+  #   data:
+  #     device: 0.0.0.0
 
 
 watch_tv_x:
@@ -54,9 +54,9 @@ watch_tv:
       source: Freesat
     service: script.wake_rxv481d
   - delay: 00:00:10
-  - service: hdmi_cec.power_on
-    data:
-      device: 0.0.0.0
+  # - service: hdmi_cec.power_on
+  #   data:
+  #     device: 0.0.0.0
 
 play_ps4:
   alias: Play PS4
@@ -77,9 +77,9 @@ play_ps4:
       source: PS4
     service: script.wake_rxv481d
   - delay: 00:00:10
-  - service: hdmi_cec.power_on
-    data:
-      device: 0.0.0.0
+  # - service: hdmi_cec.power_on
+  #   data:
+  #     device: 0.0.0.0
 
 play_vinyl:
   alias: Play vinyl
@@ -178,9 +178,9 @@ ps4_start_x:
     data_template:
       source: 'PS4'
   - delay: 00:00:10
-  - service: hdmi_cec.power_on
-    data:
-      device: 0.0.0.0
+  # - service: hdmi_cec.power_on
+  #   data:
+  #     device: 0.0.0.0
 
 
 
@@ -274,15 +274,15 @@ shutdown_living_room:
       entity_id: media_player.living_room_speaker
       media_content_id: https://nadnerb.duckdns.org:8123/local/shutdown.mp3
       media_content_type: audio/mp4
-  - service: hdmi_cec.standby
-    data:
-      device: 0.0.0.0 #tv?
+  # - service: hdmi_cec.standby
+  #   data:
+  #     device: 0.0.0.0 #tv?
   - service: media_player.turn_off
     data:
       entity_id: media_player.tv
-  - service: hdmi_cec.standby
-    data:
-      device: 2.2.0.0 #freesat?
+  # - service: hdmi_cec.standby
+  #   data:
+  #     device: 2.2.0.0 #freesat?
   # - service: light.turn_on
   #   data:
   #     entity_id: light.hyperion
@@ -358,9 +358,9 @@ wake_rxv481d_action:
   - service: switch.turn_off
     data:
       entity_id: switch.led
-  - service: hdmi_cec.power_on
-    data:
-      device: 2.0.0.0
+  # - service: hdmi_cec.power_on
+  #   data:
+  #     device: 2.0.0.0
   - service: media_player.turn_on
     entity_id: media_player.yamaha_rxv481d
   - service: media_player.select_source

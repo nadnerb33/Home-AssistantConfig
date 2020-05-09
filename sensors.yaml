@@ -53,6 +53,8 @@
     - residualNextDate
     - AttachmentURL
   value_template: 'OK'
+  scan_interval: 216000
+
 
 - platform: template
   sensors:
