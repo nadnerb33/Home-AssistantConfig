@@ -80,7 +80,7 @@ views:
             name: Bedroom
           - entity: sensor.conservatory_temperature
             name: Conservatory
-          - entity: sensor.conservatory_temperature
+          - entity: sensor.studio_temperature
             name: Studio
           - entity: sensor.garage_temperature
             name: Garage
@@ -291,6 +291,14 @@ views:
           - sensor.a_ch
           - sensor.b_ch
           - sensor.c_ch
+      - type: history-graph
+        title: 'ESP12E'
+        hours_to_show: 1
+        refresh_interval: 900
+        entities:
+          - sensor.studio_temperature
+          - sensor.conservatory_temperature
+          - sensor.bedroom_temperature
 ######## Garage ########
   - title: Garage
     icon: 'mdi:garage'
